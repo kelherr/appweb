@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <title>Agregar Donacion</title>
+    <link rel="stylesheet" type="text/css" href="../css/formularios.css">
+  </head>
+<body class="box">
+  <div class="main-container">
+    <div id="val-box" class="val" hidden>
+      <h2 id="val-msg">_</h2>
+      <u1 id="val-list"></u1>
+    </div>
+    <form id="login-form" class="formulario" method="post" enctype="multipart/form-data">
+      <h3>Datos de Contacto</h3>
+      <div id="nombre-input" class="grupo-input">
+        <label for="nombre">Nombre</label>
+        <input id="nombre" name="nombre" type="text" size="80">
+      </div>
+      <div id="email-input" class="grupo-input">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="text" size="30">
+      </div>
+      <div id="celular-input" class="grupo-input">
+        <label for="celular">Teléfono celular</label>
+        <input id="celular" name="celular" type="text" size="15">
+      </div>
+      <h3>Dirección</h3>
+      <div class="grupo-input">
+        <label for="region">Región</label>
+        <select id="region" name="region">
+          <option value="" selected="selected">--</option>
+        </select>
+      </div>
+      <div class="grupo-input">
+        <label for="comuna">Comuna</label>
+        <select id="comuna" name="comuna">
+          <option value="" selected="selected">--</option>
+        </select>
+      </div> 
+      <div id="calle-numero-input" class="grupo-input">
+        <label for="calle-numero">Calle y Número</label>
+        <input id="calle-numero" name="calle-numero" type="text" size="80">
+      </div>
+      <h3>Datos Donación</h3>
+      <div id="tipo-input" class="grupo-input">
+        <label for="tipo">Tipo de Donación</label>
+        <select name="tipo" id="tipo">
+          <option value="" selected="selected">--</option>
+          <option value="fruta">Fruta</option>
+          <option value="verdura">Verdura</option>
+          <option value="otros">Otro</option>
+        </select>
+      </div>
+      <div id="descripcion-input" class="grupo-input">
+        <label for="descripcion">Descripción</label>
+        <input id="descripcion" name="descripcion" type="text" size="80">
+      </div>
+      <div id="cantidad-input" class="grupo-input">
+        <label for="cantidad">Cantidad</label>
+        <input id="cantidad" name="cantidad" type="text" size="10">
+      </div>
+      <div id="condiciones-input" class="grupo-input">
+        <label for="condiciones">Condiciones de Retiro</label>
+        <input id="condiciones" name="condiciones" type="text" size="80">
+      </div>
+      <div id="fecha-disponibilidad-input" class="grupo-input">
+        <label for="fecha-disponibilidad">Fecha Disponibilidad</label>
+        <input id="fecha-disponibilidad" name="fecha-disponibilidad" type="text" size="10">
+      </div>
+      <h3>Foto(s) Donación</h3>
+      <div id="foto1-input" class="grupo-input">
+        <label for="foto-1">Foto 1</label>
+        <input id="foto-1" name="foto-1" type="file">
+      </div>
+      <div id="foto2-input" class="grupo-input">
+        <label for="foto-2">Foto 2</label>
+        <input id="foto-2" name="foto-2" type="file">
+      </div>
+      <div id="foto3-input" class="grupo-input">
+        <label for="foto-3">Foto 3</label>
+        <input id="foto-3" name="foto-3" type="file">
+      </div>
+      <div class="boton">
+        <button class="enviar" type="button" id="envio">Agregar Donación</button>
+      </div>
+      <div class="btn-conf" id="confirmar" hidden>
+        <p id="msg">¿Confirma que desea agregar esta donación?</p>
+        <button id="no" class="enviar">No, quiero volver al formulario</button>
+        <button id="si" class="enviar" type="submit">Si, confirmo</button>
+        <button id="volver" class="enviar" onclick="irInicio()" hidden>Volver al inicio</button>
+      </div>
+    </form>
+  </div>
+  <script src="../js/regiones-comunas.js"></script>
+  <script src="../js/validacion-donacion.js"></script>
+</body>
+</html>

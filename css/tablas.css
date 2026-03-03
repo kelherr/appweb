@@ -1,0 +1,49 @@
+.box {
+  background-color: #c6ff6b;
+}
+
+.tabla {
+  border-collapse: collapse;
+  margin: 25px 0;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: "Lucida Console", "Courier New", monospace;
+  min-width: 1000px;
+}
+
+.tabla thead tr {
+  background-color: #ffc95e;
+  text-align: center;
+}
+
+.tabla th,
+.tabla td {
+    padding: 8px 10px;
+    text-align: center;
+    border: 2px solid #e59c3d;
+}
+
+.tabla tbody { 
+  background-color: whitesmoke;
+  border: 2px solid #e59c3d;
+  cursor: pointer;
+}
+
+.volver {
+  text-align: center;
+}
+
+.boton {
+  border-radius:40px;
+  border: 1px solid #e59c3d;
+  background-color: whitesmoke;
+  font-family: "Lucida Console", "Courier New", monospace;
+  font-size: 1.2rem;
+  margin: 1rem;
+  padding: 0.5rem 1rem;
+  text-transform: uppercase;
+}
+
+.boton:hover {
+  color: green;
+}

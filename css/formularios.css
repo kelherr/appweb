@@ -1,0 +1,43 @@
+.box {
+  background-image: linear-gradient(to left top, #cce942, #beec47, #b0ee4d, 
+    #a0f054, #8ff25c, #98ec54, #9fe54c, #a6df45, #bfcf34, #d1be2e, 
+    #ddad33, #e59c3d);
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: center;
+  font-family: "Lucida Console", "Courier New", monospace;
+}
+
+input[type=text], select {
+  background-color: #ffc95e;
+  padding: 5px 5px;
+  border: 1px solid #e59c3d;
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+
+.val {
+  font-family: "Lucida Console", "Courier New", monospace;
+  text-align: center;
+  color: darkred;
+  font-size: large;
+}
+
+.enviar {
+  border-radius:40px;
+  border: 1px solid #e59c3d;
+  background-color: whitesmoke;
+  font-family: "Lucida Console", "Courier New", monospace;
+  font-size: 1.2rem;
+  margin: 1rem;
+  padding: 0.5rem 1rem;
+  text-transform: uppercase;
+}
+
+.enviar:hover {
+  color: green;
+}
