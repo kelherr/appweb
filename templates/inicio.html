@@ -2,16 +2,29 @@
 <html lang="es">
   <head>
     <meta charset="utf-8">
-    <title>Inicio</title>
-    <link rel="stylesheet" type="text/css" href="../css/inicio.css">
+    <title>{% block title %} Inicio {% endblock %}</title>
+    {% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/inicio.css') }}">
+    {% endblock %}
   </head>
+  
+  {% block content %} 
   <body class="box">
-    <div class="grupo-botones">
-      <button class="boton" id="donacion" onclick="irDonacion()">Agregar Donación</button>
-      <button class="boton" id="pedido" onclick="irPedidos()">Agregar Pedido</button>
-      <button class="boton" id="verdonaciones" onclick="irVerDonaciones()">Ver Donaciones</button>
-      <button class="boton" id="verpedidos" onclick="irVerPedidos()">Ver Pedidos</button>
+    {% with messages = get_flashed_messages() %}
+    <div id="mensaje">
+      {% if messages %}
+        {% for msg in messages %}
+        <p>{{ msg }}</p>
+        {% endfor %}
+      {% endif %}
     </div>
-    <script src="../js/botones.js"></script>
+    {% endwith %}
+    <div class="grupo-botones">
+      <a class="boton" href="{{url_for('agregarDonacion')}}">Agregar Donacion</a>
+      <a class="boton" href="{{url_for('agregarPedido')}}">Agregar Pedido</a>
+      <a class="boton" href="{{url_for('verDonaciones')}}">Ver Donaciones</a>
+      <a class="boton" href="{{url_for('verPedidos')}}">Ver Pedidos</a>
+    </div>
   </body>
+  {% endblock %}
 </html>

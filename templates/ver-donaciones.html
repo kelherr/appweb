@@ -2,9 +2,13 @@
 <html lang="es">
   <head>
     <meta charset="utf-8">
-    <title>Lista Donaciones</title>
-    <link rel="stylesheet" type="text/css" href="../css/tablas.css">
+    <title>{% block title %} Lista de Donaciones {% endblock %}</title>
+    {% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/tablas.css') }}">
+    {% endblock %}
   </head>
+  
+  {% block content %} 
   <body class="box">
     <table class="tabla">
       <thead>
@@ -17,52 +21,26 @@
           <th>Foto</th> 
         </tr>
       </thead>
+      {% if data %}
       <tbody>
-        <tr onclick="irInfoDonacion()">
-          <td>Conchalí</td>
-          <td>Fruta</td>
-          <td>10 kilos</td>
-          <td>30-04-2023</td>
-          <td>Kelly</td>
-          <td><img src="../img/manzana.jpg"  alt="" width="120" height="120"></td>
+        {% for donacion in data %}
+        <tr onclick="window.location.href = '{{ url_for('informacionDonacion', id_d=donacion.id_donacion)}}';">
+          <td>{{ donacion.comuna_donacion }}</td>
+          <td>{{ donacion.tipo_donacion }}</td>
+          <td>{{ donacion.cantidad_donacion }}</td>
+          <td>{{ donacion.fecha_donacion }}</td>
+          <td>{{ donacion.nombre_donacion }}</td>
+          <td><img src="{{ url_for('static', filename=donacion.ruta_foto) }}" alt="primera foto donacion" width="120" height="120"></td>
         </tr>
-        <tr onclick="irInfoDonacion()">
-          <td>Linares</td>
-          <td>Verdura</td>
-          <td>5 kilos</td>
-          <td>30-04-2023</td>
-          <td>Juan</td>
-          <td><img src="../img/lechuga.jpg" alt=""  width="120" height="120"></td>
-        </tr>
-        <tr onclick="irInfoDonacion()">
-          <td>Concepción</td>
-          <td>Fruta</td>
-          <td>20 unidades</td>
-          <td>30-04-2023</td>
-          <td>Gloria</td>
-          <td><img src= "../img/naranja.jpg" alt="" width="120" height="120"></td>
-        </tr>
-        <tr onclick="irInfoDonacion()">
-          <td>Melipilla</td>
-          <td>Fruta</td>
-          <td>14 unidades</td>
-          <td>30-04-2023</td>
-          <td>Jocelyn</td>
-          <td><img src= "../img/pinna.jpg" alt="" width="120" height="120"></td>
-        </tr>
-        <tr onclick="irInfoDonacion()">
-          <td>Pucón</td>
-          <td>Verdura</td>
-          <td>8 unidades</td>
-          <td>30-04-2023</td>
-          <td>Manuel</td>
-          <td><img src="../img/papa.jpg" alt="" width="120" height="120"></td>
-        </tr>
+        {% endfor %}
       </tbody>
+      {% endif %}
     </table>
-    <div class="volver">
-      <button class="boton" onclick="irInicio()">volver</button>
+    <div class="movement">
+      <a class="boton devolver" href="{{url_for('verDonaciones', pagina=prev_page)}}">Anterior</a> 
+      <a class="boton" href="{{url_for('inicio')}}">Volver</a>
+      <a class="boton avanzar" href="{{url_for('verDonaciones', pagina=next_page)}}">Siguiente</a>
     </div>
-    <script src="../js/botones.js"></script>
   </body>
+  {% endblock %}
 </html>

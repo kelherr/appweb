@@ -88,17 +88,17 @@ const validarFoto = (foto1, foto2, foto3) => {
   
   if (foto1){
     tipoArchivo = foto1.type.split("/")[0];
-    esValida = (esValida && tipoArchivo == "image") || (esValida && foto1.type == "application/pdf");
+    esValida = (esValida && tipoArchivo == "image");
   }
 
   if (foto2){
     tipoArchivo = foto2.type.split("/")[0];
-    esValida = (esValida && tipoArchivo == "image") || (esValida && foto2.type == "application/pdf");
+    esValida = (esValida && tipoArchivo == "image");
   }
 
   if (foto3){
     tipoArchivo = foto3.type.split("/")[0];
-    esValida = (esValida && tipoArchivo == "image") || (esValida && foto3.type == "application/pdf");
+    esValida = (esValida && tipoArchivo == "image");
   }
 
   return esValida;
@@ -181,13 +181,9 @@ const validateForm = () => {
     window.scrollTo(0, 0);
 
   } else {
-    let msg = document.getElementById("msg");
     let conf = document.getElementById("confirmar");
     let btn_envio = document.getElementById("envio");
-    let si = document.getElementById("si");
     let no = document.getElementById("no");
-    let volver = document.getElementById("volver");
-
     btn_envio.hidden = true;
     conf.hidden = false;
 
@@ -195,17 +191,19 @@ const validateForm = () => {
       conf.hidden = true;
       btn_envio.hidden = false;
     });
-
-    myForm.addEventListener("submit", function(event){
-      msg.innerHTML = "Hemos recibido la información de su donación. Muchas gracias.";
-      si.hidden = true;
-      no.hidden = true;
-      volver.hidden = false;
-      event.preventDefault();
-    });
   }
 };
 
 let submitBtn = document.getElementById("envio");
 submitBtn.addEventListener("click", validateForm);
 
+//informacion-donacion.html
+function aumentar(foto){
+  if(foto.width == "640"){
+    foto.style.width = "1280px";
+    foto.style.height = "1024px"
+  } else if(foto.width == "1280"){
+    foto.style.width = "640px";
+    foto.style.height = "480px";
+  } 
+};

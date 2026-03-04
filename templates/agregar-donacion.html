@@ -2,11 +2,20 @@
 <html lang="es">
   <head>
     <meta charset="utf-8">
-    <title>Agregar Donacion</title>
-    <link rel="stylesheet" type="text/css" href="../css/formularios.css">
+    <title>{% block title %} Agregar Donación {% endblock %}</title>
+    {% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/formularios.css') }}">
+    {% endblock %}
   </head>
+
+{% block content %} 
 <body class="box">
   <div class="main-container">
+    {%if error %}
+    <div>
+      <h2>{{ error }}</h2>
+    </div>
+    {% endif %}
     <div id="val-box" class="val" hidden>
       <h2 id="val-msg">_</h2>
       <u1 id="val-list"></u1>
@@ -71,15 +80,15 @@
       <h3>Foto(s) Donación</h3>
       <div id="foto1-input" class="grupo-input">
         <label for="foto-1">Foto 1</label>
-        <input id="foto-1" name="foto-1" type="file">
+        <input id="foto-1" name="foto-1" type="file" accept="image/png, image/jpg, image/gif, image/jpeg">
       </div>
       <div id="foto2-input" class="grupo-input">
         <label for="foto-2">Foto 2</label>
-        <input id="foto-2" name="foto-2" type="file">
+        <input id="foto-2" name="foto-2" type="file" accept="image/png, image/jpg, image/gif, image/jpeg">
       </div>
       <div id="foto3-input" class="grupo-input">
         <label for="foto-3">Foto 3</label>
-        <input id="foto-3" name="foto-3" type="file">
+        <input id="foto-3" name="foto-3" type="file" accept="image/png, image/jpg, image/gif, image/jpeg">
       </div>
       <div class="boton">
         <button class="enviar" type="button" id="envio">Agregar Donación</button>
@@ -88,11 +97,13 @@
         <p id="msg">¿Confirma que desea agregar esta donación?</p>
         <button id="no" class="enviar">No, quiero volver al formulario</button>
         <button id="si" class="enviar" type="submit">Si, confirmo</button>
-        <button id="volver" class="enviar" onclick="irInicio()" hidden>Volver al inicio</button>
       </div>
     </form>
   </div>
-  <script src="../js/regiones-comunas.js"></script>
-  <script src="../js/validacion-donacion.js"></script>
 </body>
+{% endblock %}
+{% block javascript %}
+<script lang="javascript" src="{{ url_for('static', filename='js/regiones-comunas.js') }}"></script>
+<script lang="javascript" src="{{ url_for('static', filename='js/validacion-donacion.js') }}"></script>
+{% endblock %}
 </html>

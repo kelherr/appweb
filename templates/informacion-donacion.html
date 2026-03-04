@@ -2,74 +2,85 @@
 <html lang="es">
   <head>
     <meta charset="utf-8">
-    <title>Informacion Donacion</title>
-    <link rel="stylesheet" type="text/css" href="../css/informacion.css">
+    <title>{% block title %} Información Donacion {% endblock %}</title>
+    {% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/informacion.css') }}">
+    {% endblock %}
   </head>
+
+  {% block content %}
+  {% if data %}
   <body class="box">
     <div class="header">
       <h2>Información de la Donación</h2>
     </div>
+    {% for don in data %}
     <table class="tabla">
       <tr>
         <th>Nombre</th>
-        <td>Pepito Pérez</td> 
+        <td>{{ don.info_nombre }}</td> 
       </tr>
       <tr>
         <th>Email</th>
-        <td>pepitoperez1234@gmail.com</td> 
+        <td>{{ don.info_email }}</td> 
       </tr>
       <tr>
         <th>Teléfono Celular</th>
-        <td>987654321</td> 
-      </tr>
-      <tr>
-        <th>Región</th>
-        <td>Metropolitana</td> 
+        <td>{{ don.info_celular }}</td> 
       </tr>
       <tr>
         <th>Comuna</th>
-        <td>Peñalolen</td> 
+        <td>{{ don.info_comuna }}</td> 
       </tr>
       <tr>
         <th>Calle y Número</th>
-        <td>Calle inventada 986</td> 
+        <td>{{ don.info_calle }}</td> 
       </tr>
       <tr>
         <th>Tipo de Donación</th>
-        <td>Fruta</td> 
+        <td>{{ don.info_tipo }}</td> 
       </tr>
       <tr>
         <th>Descripción</th>
-        <td>Una manzana muy bonita</td> 
+        <td>{{ don.info_desc }}</td> 
       </tr>
       <tr>
         <th>Cantidad</th>
-        <td>10 unidades</td> 
+        <td>{{ don.info_cantidad }}</td> 
       </tr>
       <tr>
         <th>Condiciones de Retiro</th>
-        <td>Venir a mi domicilio cualquier día, entre 18:00 y 19:00</td> 
+        <td>{{ don.info_condiciones }}</td> 
       </tr>
       <tr>
         <th>Fecha Disponibilidad</th>
-        <td>2023-05-02</td> 
+        <td>{{ don.info_fecha }}</td> 
       </tr>
-      <tr>
-        <th>Foto 1</th>
-        <td><img src="../img/manzana.jpg" id="foto1" onclick="aumentar(this)" alt="" height="480" width="640"></td> 
+      {% for fot in data_fotos%}
+      <tr class="size-photo">
+        <th>Foto</th>
+        <td><img src="{{ url_for('static', filename=fot.info_ruta) }}" alt="imagen donacion" width="640" height="480" onclick="aumentar(this)"></td> 
       </tr>
-      <tr>
-        <th>Foto 2</th>
-        <td><img src="../img/grupo-manzanas.jpg" id="foto2" onclick="aumentar(this)" alt="" height="480" width="640"></td> 
-      </tr>
-      <tr>
-        <th>Foto 3</th>
-        <td></td> 
-      </tr>
+      {% endfor %}
     </table>
+    {% endfor %}
     <div class="volver">
-      <button class="boton" onclick="irVerDonaciones()">volver</button>
+      <a class="boton" href="{{url_for('verDonaciones')}}">Volver</a>
     </div>
-    <script src="../js/botones.js"></script>
+    {% block javascript %}
+    <script lang="javascript">
+      function aumentar(foto){
+        if(foto.width == "640"){
+          foto.style.width = "1280px";
+          foto.style.height = "1024px"
+        } else if(foto.width == "1280"){
+          foto.style.width = "640px";
+          foto.style.height = "480px";
+        } 
+      };
+    </script>
+    {% endblock %}
   </body> 
-</html> 
+  {% endif %}
+  {% endblock %}
+</html>

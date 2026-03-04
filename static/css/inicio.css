@@ -5,9 +5,8 @@
   background-image: linear-gradient(to left top, #cce942, #beec47, #b0ee4d, 
   #a0f054, #8ff25c, #98ec54, #9fe54c, #a6df45, #bfcf34, #d1be2e, 
   #ddad33, #e59c3d);
-  border: 1px solid #e59c3d;
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  height: 70%;
+  border: 3px solid #e59c3d;
+  border-radius: 50%;
   max-width: 400px;
   margin: 2% auto;
   padding: 2rem;
@@ -15,17 +14,29 @@
   text-align: center;
 }
 
+.mensaje, p {
+  font-family: "Lucida Console", "Courier New", monospace;
+  text-align: center;
+  color: darkred;
+  font-size: large;
+  background-color: whitesmoke;
+  width: 40%;
+}
+
 .boton {
   border-radius:40px;
+  display: flex;
   border: 1px solid #e59c3d;
   background-color: #ffc95e;
+  color: black;
   font-family: "Lucida Console", "Courier New", monospace;
-  font-size: 1.55rem;
+  font-size: 1.5rem;
   font-weight: 600;
-  margin: 1rem 15px;
+  margin: 0 auto;
   padding: 0.5rem 1rem;
   text-transform: uppercase;
-  width : 50%;
+  width: 40%;
+  text-decoration: none;
 }
 
 .boton:hover {

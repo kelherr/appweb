@@ -1,8 +1,11 @@
+from flask import Flask, url_for, redirect, render_template, request, flash
+from utils.validations import *
+from database import db
+from werkzeug.utils import secure_filename
+import hashlib
+import filetype
 import os
-from flask import Flask, render_template
 
-
-#UPLOAD_FOLDER = 'static/img'
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'dev_key')
 app.config['UPLOAD_FOLDER'] = os.path.join('static', 'img')
@@ -11,3 +14,218 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 @app.route('/')
 def inicio():
     return render_template('inicio.html')
+
+
+@app.route('/agregar-donacion', methods=["GET", "POST"])
+def agregarDonacion():
+    error = None
+    if request.method == 'POST':
+        nombre = request.form.get('nombre')
+        region = request.form.get('region')
+        comuna = request.form.get('comuna')
+        email = request.form.get('email')
+        celular = request.form.get('celular')
+        calle = request.form.get('calle-numero')
+        cantidad = request.form.get('cantidad')
+        tipo = request.form.get('tipo')
+        fecha = request.form.get('fecha-disponibilidad')
+        descripcion = request.form.get('descripcion')
+        condiciones = request.form.get('condiciones')
+        foto1 = request.files.get('foto-1')
+        foto2 = request.files.get('foto-2')
+        foto3 = request.files.get('foto-3')
+
+        if validar_donacion(nombre, email, region, comuna, calle, celular, 
+                        cantidad, tipo, fecha, foto1, foto2, foto3):               
+            
+            donacion = db.addDonation(comuna, region, calle, tipo, cantidad, fecha, 
+                            descripcion, condiciones, nombre, email, celular)            
+            if donacion:
+                if foto1.filename != "":
+                    _filename = hashlib.sha256(
+                        secure_filename(foto1.filename).encode("utf-8")
+                    ).hexdigest()
+                    _extension = filetype.guess(foto1).extension
+                    img_filename = f"{_filename}.{_extension}"
+                    _path = os.path.join(app.config['UPLOAD_FOLDER'], img_filename)
+                    foto1.save(_path)
+                    path_db = 'img/'+ img_filename
+                    id_donation = db.getIdDonation()
+                    result = db.addImage(path_db, img_filename, id_donation)
+                    if not result:
+                        error = 'La solicitud no puede ser procesada'
+                        return render_template('/agregar-donacion', error=error)
+                
+                if foto2.filename != "":
+                    _filename = hashlib.sha256(
+                        secure_filename(foto2.filename).encode("utf-8")
+                    ).hexdigest()
+                    _extension = filetype.guess(foto2).extension
+                    img_filename = f"{_filename}.{_extension}"
+                    _path = os.path.join(app.config['UPLOAD_FOLDER'], img_filename)
+                    foto2.save(_path)
+                    path_db = 'img/'+ img_filename
+                    id_donation = db.getIdDonation()
+                    result = db.addImage(path_db, img_filename, id_donation)
+                    if not result:
+                        error = 'La solicitud no puede ser procesada'
+                        return render_template('/agregar-donacion', error=error)
+
+                if foto3.filename != "":
+                    _filename = hashlib.sha256(
+                        secure_filename(foto3.filename).encode("utf-8")
+                    ).hexdigest()
+                    _extension = filetype.guess(foto3).extension
+                    img_filename = f"{_filename}.{_extension}"
+                    _path = os.path.join(app.config['UPLOAD_FOLDER'], img_filename)
+                    foto3.save(_path)
+                    path_db = 'img/'+ img_filename
+                    id_donation = db.getIdDonation()
+                    result = db.addImage(path_db, img_filename, id_donation)
+                    if not result:
+                        error = 'La solicitud no puede ser procesada' 
+                        return render_template('/agregar-donacion', error=error)
+                flash('¡Hemos recibido su donación!')
+                return redirect(url_for('inicio'))              
+            else:
+                error = "La solicitud no puede ser procesada"
+    return render_template('agregar-donacion.html', error=error)
+
+@app.route('/agregar-pedido', methods=["GET", "POST"])
+def agregarPedido():
+    error = None
+    if request.method == 'POST':
+        nombre = request.form.get('nombre')
+        region = request.form.get('region')
+        comuna = request.form.get('comuna')
+        email = request.form.get('email')
+        celular = request.form.get('celular')
+        cantidad = request.form.get('cantidad')
+        tipo = request.form.get('tipo')
+        descripcion = request.form.get('descripcion')
+
+        if validar_pedido(email, celular, region, comuna, tipo, cantidad, nombre, descripcion):
+            result = db.addOrder(email, celular, region, comuna, tipo, cantidad, nombre, descripcion)
+            if result:
+                flash('¡Hemos recibido su pedido!')
+                return redirect(url_for('inicio'))
+            else:
+                error = "La solicitud no puede ser procesada"
+    return render_template('agregar-pedido.html', error=error)        
+
+@app.route('/ver-pedidos', defaults={'pagina': 1})
+@app.route('/ver-pedidos/<int:pagina>')
+def verPedidos(pagina):
+    entra = 0
+    por_pagina = 5
+    primero = (pagina-1)*por_pagina
+    ultimo = pagina*por_pagina
+    data = []
+    ordenes = db.getOrders(primero, ultimo)
+    for pedido in ordenes:
+        entra += 1
+        pedido_id, comuna_id, tipo, descripcion, cantidad, nombre, _, _ = pedido
+        comns = db.getComuna(comuna_id)
+        for c in comns:
+            comuna_nomb = c[0]
+        data.append({
+            "id_pedido": pedido_id,
+            "comuna_pedido": comuna_nomb,
+            "tipo_pedido": tipo,
+            "descripcion_pedido": descripcion,
+            "cantidad_pedido": cantidad,
+            "nombre_pedido": nombre
+        })
+    prev_page = pagina - 1
+    next_page = pagina + 1
+    if prev_page <= 0:
+        prev_page = 1
+    if(ordenes == () or entra<5):
+        next_page -= 1
+    return render_template('ver-pedidos.html', data=data, next_page=next_page, prev_page=prev_page)
+
+
+@app.route('/ver-donaciones', defaults={'pagina': 1})
+@app.route('/ver-donaciones/<int:pagina>')
+def verDonaciones(pagina):
+    entra = 0
+    por_pagina = 5
+    primero = (pagina-1)*por_pagina
+    ultimo = pagina*por_pagina
+    data = []
+    donaciones = db.getDonations(primero, ultimo)
+    for donacion in donaciones:
+        entra += 1
+        id_don, comuna_id, _, tipo, cantidad, fecha_disponibilidad, _, _, nombre, _, _ = donacion
+        comns = db.getComuna(comuna_id)
+        foto = db.getPictures(id_don)
+        _, ruta_archivo, _, _ = foto
+        for c in comns:
+            comuna_nomb = c[0]
+        data.append({
+            "id_donacion": id_don,
+            "comuna_donacion": comuna_nomb,
+            "tipo_donacion": tipo,
+            "cantidad_donacion": cantidad,
+            "fecha_donacion": fecha_disponibilidad,
+            "nombre_donacion": nombre,
+            "ruta_foto": ruta_archivo
+        })
+
+    prev_page = pagina - 1
+    next_page = pagina + 1
+    if prev_page <= 0:
+        prev_page = 1
+    if(donaciones == () or entra<5):
+        next_page -= 1
+    return render_template('ver-donaciones.html', data=data, next_page=next_page, prev_page=prev_page)
+
+@app.route('/información-pedido')
+@app.route('/informacion-pedido/<int:id_p>')
+def informacionPedido(id_p):
+    data = []
+    pedido = db.infoOrder(id_p)
+    _, comuna_id, tipo, descripcion, cantidad, nombre, email, celular = pedido
+    comns = db.getComuna(comuna_id)
+    for c in comns:
+        comuna_nomb = c[0]
+    data.append({
+        "info_comuna": comuna_nomb,
+        "info_tipo": tipo,
+        "info_desc": descripcion,
+        "info_cantidad": cantidad,
+        "info_nombre": nombre,
+        "info_email": email,
+        "info_celular": celular  
+    })
+    return render_template('informacion-pedido.html', data=data)
+
+@app.route('/información-donacion')
+@app.route('/informacion-donacion/<int:id_d>')
+def informacionDonacion(id_d):
+    data = []
+    data_fotos = []
+    donacion = db.infoDonation(id_d)
+    fotos = db.infoDonationPhoto(id_d)
+    _, comuna_id, calle, tipo, cantidad, fecha, descripcion, condiciones, nombre, email, celular = donacion
+    comns = db.getComuna(comuna_id)
+    for c in comns:
+        comuna_nomb = c[0]
+    for f in fotos:
+        _, ruta_archivo, _, _ = f
+        data_fotos.append({
+            "info_ruta": ruta_archivo
+        })
+    data.append({
+        "info_comuna": comuna_nomb,
+        "info_calle": calle,
+        "info_tipo": tipo,
+        "info_desc": descripcion,
+        "info_condiciones": condiciones,
+        "info_cantidad": cantidad,
+        "info_fecha": fecha,
+        "info_nombre": nombre,
+        "info_email": email,
+        "info_celular": celular  
+    })
+    return render_template('informacion-donacion.html', data=data, data_fotos=data_fotos)

@@ -29,8 +29,9 @@
   cursor: pointer;
 }
 
-.volver {
+.movement {
   text-align: center;
+  justify-content: space-around ;
 }
 
 .boton {
@@ -39,9 +40,10 @@
   background-color: whitesmoke;
   font-family: "Lucida Console", "Courier New", monospace;
   font-size: 1.2rem;
-  margin: 1rem;
+  text-align: center;
   padding: 0.5rem 1rem;
   text-transform: uppercase;
+  text-decoration: none;
 }
 
 .boton:hover {

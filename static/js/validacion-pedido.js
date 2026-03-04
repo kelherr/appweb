@@ -27,11 +27,6 @@ const validarEmail = (email) => {
     return(comuna);
   };
   
-  const validarCalle = (calle) => {
-    if(!calle) return false;
-    return (calle.length >= 3);
-  };
-  
   const validarTipo = (tipo) => {
     return(tipo);
   };
@@ -67,7 +62,6 @@ const validarEmail = (email) => {
     let celular = myForm["celular"].value;
     let region = myForm["region"].value;
     let comuna = myForm["comuna"].value;
-    let calle = myForm["calle-numero"].value;
     let tipo = myForm["tipo"].value;
     let descripcion = myForm["descripcion"].value;
     let cantidad = myForm["cantidad"].value;
@@ -93,9 +87,6 @@ const validarEmail = (email) => {
     }
     if(!validarComuna(comuna)){
       setInvalidInput("Comuna: Debe seleccionar una");
-    }
-    if(!validarCalle(calle)){
-      setInvalidInput("Calle y Número");
     }
     if(!validarTipo(tipo)){
       setInvalidInput("Tipo: Debe seleccionar uno");
@@ -127,12 +118,9 @@ const validarEmail = (email) => {
       window.scrollTo(0, 0);
   
     } else {
-      let msg = document.getElementById("msg");
       let conf = document.getElementById("confirmar");
       let btn_envio = document.getElementById("envio");
-      let si = document.getElementById("si");
       let no = document.getElementById("no");
-      let volver = document.getElementById("volver");
   
       btn_envio.hidden = true;
       conf.hidden = false;
@@ -141,16 +129,18 @@ const validarEmail = (email) => {
         conf.hidden = true;
         btn_envio.hidden = false;
       });
-  
-      myForm.addEventListener("submit", function(event){
-        msg.innerHTML = "Hemos recibido la información de su pedido. Muchas gracias.";
-        si.hidden = true;
-        no.hidden = true;
-        volver.hidden = false;
-        event.preventDefault();
-      });
     }
   };
   
   let submitBtn = document.getElementById("envio");
   submitBtn.addEventListener("click", validateForm);
+
+  function aumentar(foto){
+    if(foto.width == "640"){
+      foto.style.width = "1280px";
+      foto.style.height = "1024px"
+    } else if(foto.width == "1280"){
+      foto.style.width = "640px";
+      foto.style.height = "480px";
+    } 
+  };

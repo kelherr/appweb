@@ -40,16 +40,22 @@
 }
 
 .boton {
+  position: absolute;
   border-radius:40px;
   border: 1px solid #e59c3d;
   background-color: whitesmoke;
   font-family: "Lucida Console", "Courier New", monospace;
   font-size: 1.2rem;
-  margin: 1rem;
+  margin: 2rem;
   padding: 0.5rem 1rem;
   text-transform: uppercase;
+  text-decoration: none;
 }
 
 .boton:hover {
   color: green;
+}
+
+.size-photo{
+  cursor: pointer;
 }

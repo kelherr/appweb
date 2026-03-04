@@ -2,54 +2,57 @@
 <html lang="es">
   <head>
     <meta charset="utf-8">
-    <title>Informacion Pedido</title>
-    <link rel="stylesheet" type="text/css" href="../css/informacion.css">
+    <title>{% block title %} Información Pedido {% endblock %}</title>
+    {% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/informacion.css') }}">
+    {% endblock %}
   </head>
+  
+  {% block content %}
+  {% if data %}
   <body class="box">
     <div class="header">
       <h2>Información del Pedido</h2>
     </div>
+    {% for info in data %}
     <table class="tabla">
       <tr>
         <th>Nombre</th>
-        <td>Pepito Pérez</td> 
+        <td>{{ info.info_nombre }}</td> 
       </tr>
       <tr>
         <th>Email</th>
-        <td>pepitoperez1234@gmail.com</td> 
+        <td>{{ info.info_email }}</td> 
       </tr>
       <tr>
         <th>Teléfono Celular</th>
-        <td>987654321</td> 
-      </tr>
-      <tr>
-        <th>Región</th>
-        <td>Metropolitana</td> 
+        <td>{{ info.info_celular }}</td> 
       </tr>
       <tr>
         <th>Comuna</th>
-        <td>Peñalolen</td> 
-      </tr>
-      <tr>
-        <th>Calle y Número</th>
-        <td>Calle inventada 986</td> 
+        <td>{{ info.info_comuna }}</td> 
       </tr>
       <tr>
         <th>Tipo de Donación</th>
-        <td>Fruta</td> 
+        <td>{{ info.info_tipo }}</td> 
       </tr>
       <tr>
         <th>Descripción</th>
-        <td>Una manzana muy bonita</td> 
+        <td>{{ info.info_desc }}</td> 
       </tr>
       <tr>
         <th>Cantidad</th>
-        <td>10</td> 
+        <td>{{ info.info_cantidad }}</td> 
       </tr>
     </table>
+    {% endfor %}
     <div class="volver">
-      <button class="boton" onclick="irVerPedidos()">volver</button>
+      <a class="boton" href="{{url_for('verPedidos')}}">Volver</a>
     </div>
-    <script src="../js/botones.js"></script>
-  </body> 
-</html> 
+  </body>
+  {% endif %}
+  {% endblock %}
+{% block javascript %}
+<script lang="javascript" src="{{ url_for('static', filename='js/validacion-donacion.js') }}"></script>
+{% endblock %}
+</html>
