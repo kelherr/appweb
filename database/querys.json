@@ -1,0 +1,14 @@
+{
+  "num_comuna" : "SELECT comuna.id FROM comuna, region WHERE comuna.nombre=%s AND region.nombre=%s AND region_id=region.id;",
+  "add_donation": "INSERT INTO donacion (comuna_id, calle_numero, tipo, cantidad, fecha_disponibilidad, descripcion, condiciones_retirar, nombre, email, celular) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);",
+  "add_order": "INSERT INTO pedido (comuna_id, tipo, descripcion, cantidad, nombre_solicitante, email_solicitante, celular_solicitante) VALUES (%s, %s, %s, %s, %s, %s, %s);",
+  "add_pictures": "INSERT INTO foto (ruta_archivo, nombre_archivo, donacion_id) VALUES (%s, %s, %s);",
+  "num_donation": "SELECT MAX(id) from donacion;",
+  "orders":"SELECT id, comuna_id, tipo, descripcion, cantidad, nombre_solicitante, email_solicitante, celular_solicitante FROM pedido ORDER BY id DESC LIMIT %s,%s;",
+  "comuna_nombre": "SELECT nombre FROM comuna WHERE id=%s",
+  "donations": "SELECT id, comuna_id, calle_numero, tipo, cantidad, fecha_disponibilidad, descripcion, condiciones_retirar, nombre, email, celular FROM donacion ORDER BY id DESC LIMIT %s,%s;",
+  "prim_foto": "SELECT id, ruta_archivo, nombre_archivo, donacion_id FROM foto WHERE donacion_id=%s LIMIT 1;",
+  "info_pedido" : "SELECT id, comuna_id, tipo, descripcion, cantidad, nombre_solicitante, email_solicitante, celular_solicitante FROM pedido WHERE id=%s;",
+  "info_donacion": "SELECT id, comuna_id, calle_numero, tipo, cantidad, fecha_disponibilidad, descripcion, condiciones_retirar, nombre, email, celular FROM donacion WHERE id=%s;",
+  "info_fotos": "SELECT id, ruta_archivo, nombre_archivo, donacion_id FROM foto WHERE donacion_id=%s;"
+}
