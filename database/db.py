@@ -113,3 +113,47 @@ def infoDonationPhoto(id):
     cursor.execute(QUERY_DICT["info_fotos"], id)
     fotos = cursor.fetchall()
     return fotos
+
+"""def cantFruta(opcion):
+    conn = get_conn()
+    cursor = conn.cursor()
+    if opcion == 'donacion':
+        cursor.execute(QUERY_DICT["fruta_don"])
+    else:
+        cursor.execute(QUERY_DICT["fruta_ped"])
+    cant = cursor.fetchone()
+    return cant
+
+def cantVerdura(opcion):
+    conn = get_conn()
+    cursor = conn.cursor()
+    if opcion == 'donacion':
+        cursor.execute(QUERY_DICT["verdura_don"])
+    else:
+        cursor.execute(QUERY_DICT["verdura_ped"])
+    cant = cursor.fetchone()
+    return cant
+
+def cantOtro(opcion):
+    conn = get_conn()
+    cursor = conn.cursor()
+    if opcion == 'donacion':
+        cursor.execute(QUERY_DICT["otro_don"])
+    else:
+        cursor.execute(QUERY_DICT["otro_ped"])
+    cant = cursor.fetchone()
+    return cant"""
+
+def numOrders():
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(QUERY_DICT["order_by_type"])
+    cant = cursor.fetchall()
+    return cant
+
+totales = numOrders()
+datos_donacion = {}
+for t in totales:
+    tipo, valor = t
+    datos_donacion[tipo.capitalize()] = valor
+print(datos_donacion)

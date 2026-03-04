@@ -1,7 +1,8 @@
-from flask import Flask, url_for, redirect, render_template, request, flash
+from flask import Flask, url_for, redirect, render_template, request, flash, jsonify
 from utils.validations import *
 from database import db
 from werkzeug.utils import secure_filename
+from flask_cors import cross_origin
 import hashlib
 import filetype
 import os
@@ -229,3 +230,29 @@ def informacionDonacion(id_d):
         "info_celular": celular  
     })
     return render_template('informacion-donacion.html', data=data, data_fotos=data_fotos)
+
+@app.route('/estadisticas', methods=["GET"])
+def verEstadisticas():
+    return render_template('estadisticas.html')
+
+@app.route('/obtener-datos', methods=['GET'])
+@cross_origin(origin="localhost", supports_credentials=True)
+def obtenerDatos():
+    datos_pedidos = {}
+
+    totales = db.numOrders()
+    
+    for t in totales:
+        tipo, valor = t
+        datos_pedidos[tipo.capitalize()] = int(valor)
+
+    datos_donacion = {
+        "Fruta": 0,
+        "Verdura" : 0,
+        "Otro" : 0
+    }
+        
+    return jsonify([datos_pedidos, datos_donacion])
+
+if __name__ == "__main__":
+    app.run(debug=True, port=8007)
