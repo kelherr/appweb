@@ -5,6 +5,9 @@
     <title>{% block title %} Inicio {% endblock %}</title>
     {% block css %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/inicio.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
     {% endblock %}
   </head>
   
@@ -26,6 +29,16 @@
       <a class="boton" href="{{url_for('verPedidos')}}">Ver Pedidos</a>
       <a class="boton" href="{{url_for('verEstadisticas')}}">Ver Estadísticas</a>
     </div>
+    <div class="titulo">
+      <h2>Últimos pedidos y donaciones</h2>
+    </div>
+    <div id="map">#</div>  
+    {% block scripts %}
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+    <script src="{{url_for('static', filename='js/mapa.js')}}"></script>
+    {% endblock %}
   </body>
-  {% endblock %}
+  {% endblock content %}
 </html>

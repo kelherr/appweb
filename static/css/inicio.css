@@ -30,7 +30,7 @@
   background-color: #ffc95e;
   color: black;
   font-family: "Lucida Console", "Courier New", monospace;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 600;
   margin: 0 auto;
   padding: 0.5rem 1rem;
@@ -39,6 +39,32 @@
   text-decoration: none;
 }
 
-.boton:hover {
+.back {
+  border-radius:40px;
+  border: 1px solid #e59c3d;
+  background-color: #ffc95e;
+  color: black;
+  font-family: "Lucida Console", "Courier New", monospace;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0 auto;
+  padding: 0.5rem 0.5rem;
+  text-transform: uppercase;
+  width: 60%;
+  text-decoration: none;
+}
+
+.boton:hover, .back:hover {
   color : green;
+}
+
+.titulo {
+  font-family: "Lucida Console", "Courier New", monospace;
+  text-align: center;
+  text-decoration: underline;
+}
+
+#map { 
+  height: 600px; 
+  border: 3px solid  #e59c3d;
 }
