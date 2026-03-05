@@ -151,9 +151,9 @@ def numOrders():
     cant = cursor.fetchall()
     return cant
 
-totales = numOrders()
-datos_donacion = {}
-for t in totales:
-    tipo, valor = t
-    datos_donacion[tipo.capitalize()] = valor
-print(datos_donacion)
+def numDonations():
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(QUERY_DICT["donation_by_type"])
+    cant = cursor.fetchall()
+    return cant

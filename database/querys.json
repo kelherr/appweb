@@ -11,5 +11,6 @@
   "info_pedido" : "SELECT id, comuna_id, tipo, descripcion, cantidad, nombre_solicitante, email_solicitante, celular_solicitante FROM pedido WHERE id=%s;",
   "info_donacion": "SELECT id, comuna_id, calle_numero, tipo, cantidad, fecha_disponibilidad, descripcion, condiciones_retirar, nombre, email, celular FROM donacion WHERE id=%s;",
   "info_fotos": "SELECT id, ruta_archivo, nombre_archivo, donacion_id FROM foto WHERE donacion_id=%s;",
-  "order_by_type": "SELECT tipo, COUNT(*) as total FROM pedido GROUP BY tipo;"
+  "order_by_type": "SELECT tipo, COUNT(*) as total FROM pedido GROUP BY tipo;",
+  "donation_by_type": "SELECT tipo, COUNT(*) as total FROM donacion GROUP BY tipo;"
 }

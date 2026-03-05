@@ -238,21 +238,15 @@ def verEstadisticas():
 @app.route('/obtener-datos', methods=['GET'])
 @cross_origin(origin="localhost", supports_credentials=True)
 def obtenerDatos():
-    datos_pedidos = {}
+    tipos = ["fruta", "verdura", "otro"]
 
-    totales = db.numOrders()
-    
-    for t in totales:
-        tipo, valor = t
-        datos_pedidos[tipo.capitalize()] = int(valor)
+    pedidos = dict(db.numOrders())
+    donaciones = dict(db.numDonations())
 
-    datos_donacion = {
-        "Fruta": 0,
-        "Verdura" : 0,
-        "Otro" : 0
-    }
-        
-    return jsonify([datos_pedidos, datos_donacion])
+    pedidos_totales = {tipo: pedidos.get(tipo, 0) for tipo in tipos}
+    donaciones_totales = {tipo: donaciones.get(tipo, 0) for tipo in tipos}
+       
+    return jsonify([pedidos_totales, donaciones_totales])
 
 if __name__ == "__main__":
     app.run(debug=True, port=8007)
