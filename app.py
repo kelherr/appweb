@@ -75,7 +75,7 @@ def agregar_donacion():
                         id_donation
                     )
                     if not resultado:
-                        error = "La solicitud no puede ser procesada"
+                        error = 'La solicitud no puede ser procesada'
                         return render_template('agregar-donacion.html', error=error)
             flash('¡Hemos recibido su donación!', 'success')
             return redirect(url_for('inicio'))
@@ -84,7 +84,7 @@ def agregar_donacion():
     return render_template('agregar-donacion.html', error=error)
 
 @app.route('/agregar-pedido', methods=["GET", "POST"])
-def agregarPedido():
+def agregar_pedido():
     error = None
     if request.method == 'POST':
         nombre = request.form.get('nombre')
@@ -99,11 +99,13 @@ def agregarPedido():
         if validar_pedido(email, celular, region, comuna, tipo, cantidad, nombre, descripcion):
             result = db.addOrder(email, celular, region, comuna, tipo, cantidad, nombre, descripcion)
             if result:
-                flash('¡Hemos recibido su pedido!')
+                flash('¡Hemos recibido su pedido!', 'success')
                 return redirect(url_for('inicio'))
             else:
-                error = "La solicitud no puede ser procesada"
-    return render_template('agregar-pedido.html', error=error)        
+                flash('La solicitud no puede ser procesada', 'error')
+        else:
+            flash('Datos inválidos en el formulario', 'error')
+    return render_template('agregar-pedido.html')        
 
 @app.route('/ver-pedidos', defaults={'pagina': 1})
 @app.route('/ver-pedidos/<int:pagina>')

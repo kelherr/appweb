@@ -163,9 +163,21 @@ const validateForm = () => {
       cancelButtonColor: "#d33"
     }).then((result) => {
 
-      if (result.isConfirmed) {
-        document.getElementById("login-form").submit();
-      }
+    if (result.isConfirmed) {
+
+      Swal.fire({
+        title: "Donación Registrada",
+        text: "Su donación ha sido enviada correctamente",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false
+      });
+
+      setTimeout(() => {
+        myForm.submit();
+      }, 2000);
+
+    }
 
     });
 

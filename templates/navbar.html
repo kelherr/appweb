@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">DonApp</a>
+    <a class="navbar-brand" href="{{url_for('inicio')}}">DonApp</a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
@@ -12,7 +12,7 @@
           <a class="nav-link" href="{{url_for('agregar_donacion')}}">Agregar Donación</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{url_for('agregarPedido')}}">Agregar Pedido</a>
+          <a class="nav-link" href="{{url_for('agregar_pedido')}}">Agregar Pedido</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{url_for('verDonaciones')}}">Ver Donaciones</a>
