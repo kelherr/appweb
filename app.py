@@ -17,9 +17,8 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 def inicio():
     return render_template('home.html')
 
-
-@app.route('/agregar-donacion', methods=["GET", "POST"])
-def agregarDonacion():
+@app.route('/agregar-donacion', methods=['GET','POST'])
+def agregar_donacion():
     error = None
     if request.method == 'POST':
         nombre = request.form.get('nombre')
@@ -37,61 +36,63 @@ def agregarDonacion():
         foto2 = request.files.get('foto-2')
         foto3 = request.files.get('foto-3')
 
-        if validar_donacion(nombre, email, region, comuna, calle, celular, 
-                        cantidad, tipo, fecha, foto1, foto2, foto3):               
-            
-            donacion = db.addDonation(comuna, region, calle, tipo, cantidad, fecha, 
-                            descripcion, condiciones, nombre, email, celular)            
-            if donacion:
-                if foto1.filename != "":
-                    _filename = hashlib.sha256(
-                        secure_filename(foto1.filename).encode("utf-8")
-                    ).hexdigest()
-                    _extension = filetype.guess(foto1).extension
-                    img_filename = f"{_filename}.{_extension}"
-                    _path = os.path.join(app.config['UPLOAD_FOLDER'], img_filename)
-                    foto1.save(_path)
-                    path_db = 'img/'+ img_filename
-                    id_donation = db.getIdDonation()
-                    result = db.addImage(path_db, img_filename, id_donation)
-                    if not result:
-                        error = 'La solicitud no puede ser procesada'
-                        return render_template('/agregar-donacion', error=error)
-                
-                if foto2.filename != "":
-                    _filename = hashlib.sha256(
-                        secure_filename(foto2.filename).encode("utf-8")
-                    ).hexdigest()
-                    _extension = filetype.guess(foto2).extension
-                    img_filename = f"{_filename}.{_extension}"
-                    _path = os.path.join(app.config['UPLOAD_FOLDER'], img_filename)
-                    foto2.save(_path)
-                    path_db = 'img/'+ img_filename
-                    id_donation = db.getIdDonation()
-                    result = db.addImage(path_db, img_filename, id_donation)
-                    if not result:
-                        error = 'La solicitud no puede ser procesada'
-                        return render_template('/agregar-donacion', error=error)
-
-                if foto3.filename != "":
-                    _filename = hashlib.sha256(
-                        secure_filename(foto3.filename).encode("utf-8")
-                    ).hexdigest()
-                    _extension = filetype.guess(foto3).extension
-                    img_filename = f"{_filename}.{_extension}"
-                    _path = os.path.join(app.config['UPLOAD_FOLDER'], img_filename)
-                    foto3.save(_path)
-                    path_db = 'img/'+ img_filename
-                    id_donation = db.getIdDonation()
-                    result = db.addImage(path_db, img_filename, id_donation)
-                    if not result:
-                        error = 'La solicitud no puede ser procesada' 
-                        return render_template('/agregar-donacion', error=error)
-                flash('¡Hemos recibido su donación!')
-                return redirect(url_for('inicio'))              
-            else:
+        # validar datos
+        if validar_donacion(
+            nombre, email, region, comuna, calle,
+            celular, cantidad, tipo, fecha,
+            foto1, foto2, foto3
+        ):
+            donacion = db.addDonation(
+                comuna,
+                region,
+                calle,
+                tipo,
+                cantidad,
+                fecha,
+                descripcion,
+                condiciones,
+                nombre,
+                email,
+                celular
+            )
+            if not donacion:
                 error = "La solicitud no puede ser procesada"
-    return render_template('agregar-donacion.html', error=error)
+                return render_template('add-donations.html', error=error)
+
+            # obtener id de la donación
+            id_donation = db.getIdDonation()
+            fotos = [foto1, foto2, foto3]
+            for foto in fotos:
+                if foto and foto.filename != "":
+                    filename_seguro = secure_filename(foto.filename)
+                    hash_nombre = hashlib.sha256(
+                        filename_seguro.encode("utf-8")
+                    ).hexdigest()
+                    tipo_archivo = filetype.guess(foto)
+                    if not tipo_archivo:
+                        error = "Tipo de archivo no válido"
+                        return render_template('add-donations.html', error=error)
+                    extension = tipo_archivo.extension
+                    img_filename = f"{hash_nombre}.{extension}"
+                    ruta_guardado = os.path.join(
+                        app.config['UPLOAD_FOLDER'],
+                        img_filename
+                    )
+                    foto.save(ruta_guardado)
+                    path_db = 'img/' + img_filename
+                    resultado = db.addImage(
+                        path_db,
+                        img_filename,
+                        id_donation
+                    )
+                    if not resultado:
+                        error = "La solicitud no puede ser procesada"
+                        return render_template('add-donations.html', error=error)
+            flash('¡Hemos recibido su donación!', 'success')
+            return redirect(url_for('inicio'))
+        else:
+            error = "Datos inválidos"
+    return render_template('add-donations.html', error=error)
 
 @app.route('/agregar-pedido', methods=["GET", "POST"])
 def agregarPedido():

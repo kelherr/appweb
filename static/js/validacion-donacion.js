@@ -1,115 +1,96 @@
 // Validación del formulario de donaciones
 
 const validarEmail = (email) => {
-  if(!email) return false;
-
+  if (!email) return false;
   let re = /^[\w.]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-  let formato = re.test(email);
-
-  return formato;
+  return re.test(email);
 };
 
 const validarCelular = (celular) => {
-  if(!celular) return false;
+  if (!celular) return false;
 
-  let largoValido = (celular.length === 9);
-
+  let largoValido = celular.length === 9;
   let re = /^[0-9]+$/;
-  let formato = re.test(celular);
 
-  return largoValido && formato;
+  return largoValido && re.test(celular);
 };
 
 const validarRegion = (region) => {
-  return(region);
+  return region !== "";
 };
 
 const validarComuna = (comuna) => {
-  return(comuna);
+  return comuna !== "";
 };
 
 const validarCalle = (calle) => {
-  if(!calle) return false;
-  return (calle.length >= 3);
+  if (!calle) return false;
+  return calle.length >= 3;
 };
 
 const validarTipo = (tipo) => {
-  return(tipo);
+  return tipo !== "";
 };
 
 const validarCantidad = (cantidad) => {
-  return (cantidad);
+  if (!cantidad) return false;
+
+  let re = /^[0-9]+\s?[a-zA-Z]+$/;
+  return re.test(cantidad);
 };
 
 const validarFecha = (fecha) => {
-  if(!fecha) return false;
+  if (!fecha) return false;
 
-  largoValido = (fecha.length == 10);
+  let re = /^\d{4}-\d{2}-\d{2}$/;
+  if (!re.test(fecha)) return false;
 
-  let re = /^[0-9][0-9][0-9][0-9][-]+[0-9][0-9]+[-][0-9][0-9]$/
-  let formato = re.test(fecha);
-  
-  if (!formato || !largoValido) return false;
-  let esValida = true;
-
-  //fecha ingresada
-  let arrFecha= fecha.split("-");
-  let anno = parseInt(arrFecha[0]);
-  let mes = parseInt(arrFecha[1]);
-  let dia = parseInt(arrFecha[2]);
-
-  if(dia == 31 && mes in [2, 4, 6, 9, 11]) esValida = false;
-  
-  if(dia == 30 && mes == 2) esValida = false;
-  
-  let fechaIngresada = new Date(anno, mes-1, dia);
+  let fechaIngresada = new Date(fecha);
   let fechaActual = new Date();
 
-  if(fechaIngresada < fechaActual) esValida = false;
-  
-  return esValida;
+  fechaActual.setHours(0,0,0,0);
+
+  return fechaIngresada >= fechaActual;
 };
 
 const validarNombre = (nombre) => {
-  if(!nombre) return false;
+  if (!nombre) return false;
 
   let largoValido = nombre.length >= 3 && nombre.length <= 80;
-  
-  let re = /^[a-zA-Z]+[a-zA-z|\s]+$/;
-  let formato = re.test(nombre);
+  let re = /^[a-zA-Z\s]+$/;
 
-  return formato && largoValido;
+  return largoValido && re.test(nombre);
 };
 
 const validarFoto = (foto1, foto2, foto3) => {
-  if(!(foto1 || foto2 || foto3)) return false;
-  
+
+  if (!(foto1 || foto2 || foto3)) return false;
+
   let esValida = true;
-  
-  if (foto1){
-    tipoArchivo = foto1.type.split("/")[0];
-    esValida = (esValida && tipoArchivo == "image");
+
+  if (foto1) {
+    let tipoArchivo = foto1.type.split("/")[0];
+    esValida = esValida && tipoArchivo === "image";
   }
 
-  if (foto2){
-    tipoArchivo = foto2.type.split("/")[0];
-    esValida = (esValida && tipoArchivo == "image");
+  if (foto2) {
+    let tipoArchivo = foto2.type.split("/")[0];
+    esValida = esValida && tipoArchivo === "image";
   }
 
-  if (foto3){
-    tipoArchivo = foto3.type.split("/")[0];
-    esValida = (esValida && tipoArchivo == "image");
+  if (foto3) {
+    let tipoArchivo = foto3.type.split("/")[0];
+    esValida = esValida && tipoArchivo === "image";
   }
 
   return esValida;
 };
 
-function irInicio(){
-  location.href = "../html/inicio.html";
-};
 
 const validateForm = () => {
+
   let myForm = document.forms["login-form"];
+
   let nombre = myForm["nombre"].value;
   let email = myForm["email"].value;
   let celular = myForm["celular"].value;
@@ -119,81 +100,78 @@ const validateForm = () => {
   let tipo = myForm["tipo"].value;
   let cantidad = myForm["cantidad"].value;
   let fecha = myForm["fecha-disponibilidad"].value;
+
   let foto1 = myForm["foto-1"].files[0];
   let foto2 = myForm["foto-2"].files[0];
   let foto3 = myForm["foto-3"].files[0];
 
   let invalidInputs = [];
   let isValid = true;
+
   const setInvalidInput = (inputName) => {
     invalidInputs.push(inputName);
-    isValid &&= false;
+    isValid = false;
   };
-  
-  if(!validarNombre(nombre)){
-    setInvalidInput("Nombre");
-  }
-  if(!validarEmail(email)){
-    setInvalidInput("Email");
-  }
-  if(!validarCelular(celular)){
-    setInvalidInput("Celular");
-  }
-  if(!validarRegion(region)){
-    setInvalidInput("Región: Debe seleccionar una");
-  }
-  if(!validarComuna(comuna)){
-    setInvalidInput("Comuna: Debe seleccionar una");
-  }
-  if(!validarCalle(calle)){
-    setInvalidInput("Calle y Número");
-  }
-  if(!validarTipo(tipo)){
-    setInvalidInput("Tipo: Debe seleccionar uno");
-  }
-  if(!validarCantidad(cantidad)){
-    setInvalidInput("Cantidad");
-  }
-  if(!validarFecha(fecha)){
-    setInvalidInput("Fecha: Debe ser AAAA-MM-DD");
-  }
-  if(!validarFoto(foto1, foto2, foto3)){
-    setInvalidInput("Foto(s): Debe ingresar al menos una");
-  }
 
-  let validationBox = document.getElementById("val-box");
-  let validationMessageElem = document.getElementById("val-msg");
-  let validationListElem = document.getElementById("val-list");
+  if (!validarNombre(nombre)) setInvalidInput("Nombre");
+  if (!validarEmail(email)) setInvalidInput("Email");
+  if (!validarCelular(celular)) setInvalidInput("Celular");
+  if (!validarRegion(region)) setInvalidInput("Región: Debe seleccionar una");
+  if (!validarComuna(comuna)) setInvalidInput("Comuna: Debe seleccionar una");
+  if (!validarCalle(calle)) setInvalidInput("Calle y Número");
+  if (!validarTipo(tipo)) setInvalidInput("Tipo: Debe seleccionar uno");
+  if (!validarCantidad(cantidad)) setInvalidInput("Cantidad");
+  if (!validarFecha(fecha)) setInvalidInput("Fecha: Debe ser AAAA-MM-DD y no pasada");
+  if (!validarFoto(foto1, foto2, foto3)) setInvalidInput("Foto(s): Debe ingresar al menos una");
 
+
+
+  // SI HAY ERRORES
   if (!isValid) {
-    validationListElem.textContent = "";
-    // add invalid elements to val-list element.
-    for (input of invalidInputs) {
-      let listElement = document.createElement("li");
-      listElement.innerText = input;
-      validationListElem.append(listElement);
+
+    let listaErrores = "<ul style='text-align:left;'>";
+
+    for (let input of invalidInputs) {
+      listaErrores += `<li>${input}</li>`;
     }
-    // set val-msg
-    validationMessageElem.innerText = "Los siguiente campos son invalidos:";
 
-    // make validation prompt visible
-    validationBox.hidden = false;
-    window.scrollTo(0, 0);
+    listaErrores += "</ul>";
 
-  } else {
-    let conf = document.getElementById("confirmar");
-    let btn_envio = document.getElementById("envio");
-    let no = document.getElementById("no");
-    btn_envio.hidden = true;
-    conf.hidden = false;
-
-    no.addEventListener("click", function(){
-      conf.hidden = true;
-      btn_envio.hidden = false;
+    Swal.fire({
+      title: "Formulario con errores",
+      icon: "error",
+      html: `
+        <p>Los siguientes campos están incorrectos:</p>
+        ${listaErrores}
+      `,
+      confirmButtonText: "Revisar formulario"
     });
-  }
-};
 
+  } 
+
+  // SI TODO ESTÁ CORRECTO
+  else {
+
+    Swal.fire({
+      title: "Confirmar donación",
+      text: "¿Está seguro de que desea agregar esta donación?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, agregar",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33"
+    }).then((result) => {
+
+      if (result.isConfirmed) {
+        document.getElementById("login-form").submit();
+      }
+
+    });
+
+  }
+
+};
 let submitBtn = document.getElementById("envio");
 submitBtn.addEventListener("click", validateForm);
 
