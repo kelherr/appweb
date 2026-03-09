@@ -15,7 +15,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 @app.route('/')
 def inicio():
-    return render_template('home.html')
+    return render_template('inicio.html')
 
 @app.route('/agregar-donacion', methods=['GET','POST'])
 def agregar_donacion():
@@ -42,22 +42,11 @@ def agregar_donacion():
             celular, cantidad, tipo, fecha,
             foto1, foto2, foto3
         ):
-            donacion = db.addDonation(
-                comuna,
-                region,
-                calle,
-                tipo,
-                cantidad,
-                fecha,
-                descripcion,
-                condiciones,
-                nombre,
-                email,
-                celular
-            )
+            donacion = db.addDonation(comuna, region, calle, tipo, cantidad, fecha, descripcion, 
+                                      condiciones, nombre, email, celular)
             if not donacion:
                 error = "La solicitud no puede ser procesada"
-                return render_template('add-donations.html', error=error)
+                return render_template('agregar-donacion.html', error=error)
 
             # obtener id de la donación
             id_donation = db.getIdDonation()
@@ -71,7 +60,7 @@ def agregar_donacion():
                     tipo_archivo = filetype.guess(foto)
                     if not tipo_archivo:
                         error = "Tipo de archivo no válido"
-                        return render_template('add-donations.html', error=error)
+                        return render_template('agregar-donacion.html', error=error)
                     extension = tipo_archivo.extension
                     img_filename = f"{hash_nombre}.{extension}"
                     ruta_guardado = os.path.join(
@@ -87,12 +76,12 @@ def agregar_donacion():
                     )
                     if not resultado:
                         error = "La solicitud no puede ser procesada"
-                        return render_template('add-donations.html', error=error)
+                        return render_template('agregar-donacion.html', error=error)
             flash('¡Hemos recibido su donación!', 'success')
             return redirect(url_for('inicio'))
         else:
             error = "Datos inválidos"
-    return render_template('add-donations.html', error=error)
+    return render_template('agregar-donacion.html', error=error)
 
 @app.route('/agregar-pedido', methods=["GET", "POST"])
 def agregarPedido():
