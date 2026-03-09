@@ -7,7 +7,7 @@
 }
 
 body {
-  background-color: var(--color-light);
+  background-color: var(--color-primary);
   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
@@ -21,6 +21,11 @@ body {
   font-style: italic;
 }
 
+.navbar-toggler {
+  color: var(--color-secondary);
+  background-color: var(--color-soft);
+}
+
 .nav-link {
   color: var(--color-soft);
 }
@@ -31,10 +36,14 @@ body {
 
 .map-wrapper{
   position: relative;
+  width: 100%;
+  max-width: 1600px;
+  margin: auto;
 }
 
 #map{
-  height: 600px;
+  height: 92vh;
+  min-height: 400px;
   border: 1px solid var(--color-primary);
   border-radius: 8px;
 }
