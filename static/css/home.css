@@ -1,0 +1,54 @@
+:root {
+  --color-primary: #210B2C;
+  --color-accent: #AE759F;
+  --color-secondary: #55286f;
+  --color-soft: #D8B4E2;
+  --color-light: #BC96E6;
+}
+
+body {
+  background-color: var(--color-light);
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.navbar {
+  background-color: var(--color-primary) !important;
+}
+
+.navbar-brand {
+  color: whitesmoke;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.nav-link {
+  color: var(--color-soft);
+}
+
+.nav-link:hover {
+  color: var(--color-accent) !important;
+}
+
+.map-wrapper{
+  position: relative;
+}
+
+#map{
+  height: 600px;
+  border: 1px solid var(--color-primary);
+  border-radius: 8px;
+}
+
+.map-title{
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.9);
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  color: var(--color-primary);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 1000;
+}

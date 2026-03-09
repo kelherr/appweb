@@ -15,7 +15,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 @app.route('/')
 def inicio():
-    return render_template('inicio.html')
+    return render_template('home.html')
 
 
 @app.route('/agregar-donacion', methods=["GET", "POST"])
@@ -304,6 +304,6 @@ def obtenerMapa():
     total.append(info_donaciones)
 
     return jsonify(total)
-    
+
 if __name__ == "__main__":
     app.run(debug=True, port=8007)
