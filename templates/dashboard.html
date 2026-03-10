@@ -36,14 +36,30 @@
           </ul>
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-3">
         <div class="chart-container">
           <figure class="highcharts-figure">
-            <div id="container"></div>
+            <div id="container1"></div>
           </figure>
         </div> 
       </div>
-    </div> 
+      <div class="col-md-3">
+        <div class="chart-container">
+          <figure class="highcharts-figure">
+            <div id="container2"></div>
+          </figure>
+        </div> 
+      </div>
+    </div>  
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <div class="chart-container">
+          <figure class="highcharts-figure">
+            <div id="regiones"></div>
+          </figure>
+        </div> 
+      </div>
+    </div>  
   </div>
   </body>
   {% block scripts %}
@@ -51,7 +67,8 @@
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
     crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='js/highcharts.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/grafico-apilado.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/grafico-donut.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/grafico-barra.js') }}"></script>
   {% endblock %}
   {% endblock content %}
 </html>
