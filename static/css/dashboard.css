@@ -12,3 +12,12 @@
   text-align: center;
   color: #210B2C;
 }
+
+.chart-container {
+  width: 620px;
+}
+
+.highcharts-container{
+  border: 2px solid #210B2C;
+  border-radius: 5px;
+}
