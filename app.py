@@ -283,5 +283,9 @@ def obtener_mapa():
     total.append(info_donaciones)
     return jsonify(total)
 
+@app.route('/dashboard', methods=["GET"])
+def ver_dashboard():
+    return render_template('dashboard.html')
+
 if __name__ == "__main__":
     app.run(debug=True, port=8007)

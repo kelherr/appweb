@@ -1,0 +1,14 @@
+.card {
+  width: 18rem;
+  height: 8rem;
+  text-align: center;
+  color:whitesmoke;
+  border: 2px solid #210B2C;
+}
+
+.list-group-item {
+  font-size: 40px;
+  font-weight: bold;
+  text-align: center;
+  color: #210B2C;
+}
