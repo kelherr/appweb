@@ -193,20 +193,13 @@ def informacionPedido(id_p):
 
 @app.route('/información-donacion')
 @app.route('/informacion-donacion/<int:id_d>')
-def informacionDonacion(id_d):
+def informacion_donacion(id_d):
     data = []
     data_fotos = []
     donacion = db.infoDonation(id_d)
     fotos = db.infoDonationPhoto(id_d)
-    _, comuna_id, calle, tipo, cantidad, fecha, descripcion, condiciones, nombre, email, celular = donacion
-    comns = db.getComuna(comuna_id)
-    for c in comns:
-        comuna_nomb = c[0]
-    for f in fotos:
-        _, ruta_archivo, _, _ = f
-        data_fotos.append({
-            "info_ruta": ruta_archivo
-        })
+    _, comuna_nomb, calle, tipo, cantidad, fecha, descripcion, condiciones, nombre, email, celular = donacion
+  
     data.append({
         "info_comuna": comuna_nomb,
         "info_calle": calle,
@@ -219,6 +212,14 @@ def informacionDonacion(id_d):
         "info_email": email,
         "info_celular": celular  
     })
+
+    for f in fotos:
+        _, ruta_archivo, nombre_archivo, _ = f
+        data_fotos.append({
+            "info_ruta": ruta_archivo,
+            "info_archivo": nombre_archivo 
+        })
+
     return render_template('informacion-donacion.html', data=data, data_fotos=data_fotos)
 
 @app.route('/estadisticas', methods=["GET"])

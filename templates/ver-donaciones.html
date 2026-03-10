@@ -28,7 +28,7 @@
       {% if data %}
       <tbody>
         {% for donacion in data %}
-        <tr onclick="window.location.href = '{{ url_for('informacionDonacion', id_d=donacion.id_donacion)}}';">
+        <tr onclick="window.location.href = '{{ url_for('informacion_donacion', id_d=donacion.id_donacion)}}';">
           <td style="background-color:whitesmoke; color:#210B2C; text-align:center;">{{ donacion.comuna_donacion }}</td>
           <td style="background-color:whitesmoke; color:#210B2C; text-align:center;">{{ donacion.tipo_donacion }}</td>
           <td style="background-color:whitesmoke; color:#210B2C; text-align:center;">{{ donacion.cantidad_donacion }}</td>

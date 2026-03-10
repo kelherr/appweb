@@ -79,15 +79,6 @@ def getOrders(start, finish):
     pedidos = cursor.fetchall()
     return pedidos
 
-"""
-def getDonations(start, finish):
-    conn = get_conn()
-    cursor = conn.cursor()
-    cursor.execute(QUERY_DICT["donations"], (start, finish))
-    donaciones = cursor.fetchall()
-    return donaciones
-"""
-
 def getDonations(start, finish):
     conn = get_conn()
     cursor = conn.cursor()
@@ -101,6 +92,7 @@ def getPictures(id):
     cursor.execute(QUERY_DICT["prim_foto"], id)
     foto = cursor.fetchone()
     return foto
+
 
 def infoOrder(id):
     conn = get_conn()
@@ -122,36 +114,6 @@ def infoDonationPhoto(id):
     cursor.execute(QUERY_DICT["info_fotos"], id)
     fotos = cursor.fetchall()
     return fotos
-
-"""def cantFruta(opcion):
-    conn = get_conn()
-    cursor = conn.cursor()
-    if opcion == 'donacion':
-        cursor.execute(QUERY_DICT["fruta_don"])
-    else:
-        cursor.execute(QUERY_DICT["fruta_ped"])
-    cant = cursor.fetchone()
-    return cant
-
-def cantVerdura(opcion):
-    conn = get_conn()
-    cursor = conn.cursor()
-    if opcion == 'donacion':
-        cursor.execute(QUERY_DICT["verdura_don"])
-    else:
-        cursor.execute(QUERY_DICT["verdura_ped"])
-    cant = cursor.fetchone()
-    return cant
-
-def cantOtro(opcion):
-    conn = get_conn()
-    cursor = conn.cursor()
-    if opcion == 'donacion':
-        cursor.execute(QUERY_DICT["otro_don"])
-    else:
-        cursor.execute(QUERY_DICT["otro_ped"])
-    cant = cursor.fetchone()
-    return cant"""
 
 def numOrders():
     conn = get_conn()
