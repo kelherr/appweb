@@ -128,3 +128,17 @@ def numDonations():
     cursor.execute(QUERY_DICT["donation_by_type"])
     cant = cursor.fetchall()
     return cant
+
+def pedidos_mapa():
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(QUERY_DICT["pedidos_mapa"])
+    cant = cursor.fetchall()
+    return cant
+
+def donaciones_mapa():
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(QUERY_DICT["donaciones_mapa"])
+    cant = cursor.fetchall()
+    return cant

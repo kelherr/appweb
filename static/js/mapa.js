@@ -58,14 +58,11 @@ fetch("http://localhost:5000/obtener-mapa")
 
     const orders = data[0];
     const donations = data[1];
-
     const communeTracker = {};
 
     renderOrders(orders, communeTracker);
     renderDonations(donations, communeTracker);
-
   });
-
 
 // -----------------------------
 // Render orders
@@ -89,7 +86,7 @@ function renderOrders(orders, communeTracker){
       </ul>
     `;
 
-    createMarker(lat, lng, "#FE5F55", popupContent);
+    createMarker(lat, lng, "#e62f22", popupContent);
   }
 
 }
@@ -119,7 +116,7 @@ function renderDonations(donations, communeTracker){
       </ul>
     `;
 
-    createMarker(lat, lng, "#94C9A9", popupContent);
+    createMarker(lat, lng, "#07a345", popupContent);
   }
 
 }

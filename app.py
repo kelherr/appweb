@@ -239,22 +239,17 @@ def obtenerDatos():
 
 @app.route('/obtener-mapa', methods=["GET"])
 @cross_origin(origin="localhost", supports_credentials=True)
-def obtenerMapa():
+def obtener_mapa():
     total = []
     info_pedidos = []
     info_donaciones = []
-    ultimos_pedidos = db.getOrders(0, 5)
-    ultimas_donaciones = db.getDonations(0, 5)
-    for pedido in ultimos_pedidos:
-        #el popup debe mostrar el ID, tipo, cantidad y el email del solicitante.
-        id_p, comuna_id, tipo, _, cantidad, _, email, _ = pedido
-        comns = db.getComuna(comuna_id)
-        for c in comns:
-            comuna_nomb = c[0]
+    pedidos = db.pedidos_mapa()
+    donaciones = db.donaciones_mapa()
+
+    for p in pedidos:
+        id_p, comuna_nomb, tipo, cantidad, email = p
         coord = search_comuna(comuna_nomb)
-        if coord == None:
-            continue
-        else:
+        if coord is not None:
             (lng, lat) = coord
             info_pedidos.append({
                 "id_pedido": id_p,
@@ -265,32 +260,27 @@ def obtenerMapa():
                 "lat_pedido": lat,
                 "comuna_pedido": comuna_nomb,
             })
-
+        
     total.append(info_pedidos)
 
-    for donacion in ultimas_donaciones:
-        id_d, comuna_d, calle_numero, tipo, cantidad, fecha_disponibilidad, _, _, _, email, _ = donacion
-        comns = db.getComuna(comuna_d)
-        for c in comns:
-            comuna_nomb = c[0]
-        coord = search_comuna(comuna_nomb)
-        if coord == None:
-            continue
-        else:
-            (lng, lat) = coord
+    for d in donaciones:
+        id_d, c_n, calle_numero, tipo_p, cantidad_p, fecha_disponibilidad, email_p= d
+        coord = search_comuna(c_n)
+        if coord is not None:
+            (lng_p, lat_p) = coord
             info_donaciones.append({
                 "id_donacion": id_d,
                 "calle_numero": calle_numero,
-                "tipo_donacion": tipo,
-                "cantidad_donacion": cantidad,
-                "email_donacion": email,
+                "tipo_donacion": tipo_p,
+                "cantidad_donacion": cantidad_p,
+                "email_donacion": email_p,
                 "fecha_donacion": fecha_disponibilidad,
-                "lng_donacion": lng,
-                "lat_donacion": lat,
-                "comuna_donacion": comuna_nomb,
+                "lng_donacion": lng_p,
+                "lat_donacion": lat_p,
+                "comuna_donacion": c_n,
             })
-    total.append(info_donaciones)
 
+    total.append(info_donaciones)
     return jsonify(total)
 
 if __name__ == "__main__":
