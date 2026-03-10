@@ -186,14 +186,3 @@ const validateForm = () => {
 };
 let submitBtn = document.getElementById("envio");
 submitBtn.addEventListener("click", validateForm);
-
-//informacion-donacion.html
-function aumentar(foto){
-  if(foto.width == "640"){
-    foto.style.width = "1280px";
-    foto.style.height = "1024px"
-  } else if(foto.width == "1280"){
-    foto.style.width = "640px";
-    foto.style.height = "480px";
-  } 
-};

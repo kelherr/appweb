@@ -173,13 +173,11 @@ def ver_donaciones(pagina):
 
 @app.route('/información-pedido')
 @app.route('/informacion-pedido/<int:id_p>')
-def informacionPedido(id_p):
+def informacion_pedido(id_p):
     data = []
     pedido = db.infoOrder(id_p)
-    _, comuna_id, tipo, descripcion, cantidad, nombre, email, celular = pedido
-    comns = db.getComuna(comuna_id)
-    for c in comns:
-        comuna_nomb = c[0]
+    _, comuna_nomb, tipo, descripcion, cantidad, nombre, email, celular = pedido
+    
     data.append({
         "info_comuna": comuna_nomb,
         "info_tipo": tipo,

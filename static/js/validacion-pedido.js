@@ -163,13 +163,3 @@ let submitBtn = document.getElementById("envio");
 if (submitBtn) {
   submitBtn.addEventListener("click", validateForm);
 ;}
-
-function aumentar(foto){
-    if(foto.width == "640"){
-      foto.style.width = "1280px";
-      foto.style.height = "1024px"
-    } else if(foto.width == "1280"){
-      foto.style.width = "640px";
-      foto.style.height = "480px";
-    } 
-};

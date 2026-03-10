@@ -27,7 +27,7 @@
       {% if data %}
       <tbody>
         {% for pedido in data %}
-        <tr onclick="window.location.href = '{{ url_for('informacionPedido', id_p=pedido.id_pedido)}}';">
+        <tr onclick="window.location.href = '{{ url_for('informacion_pedido', id_p=pedido.id_pedido)}}';">
           <td style="background-color:whitesmoke; color:#210B2C; text-align:center;">{{ pedido.comuna_pedido }}</td>
           <td style="background-color:whitesmoke; color:#210B2C; text-align:center;">{{ pedido.tipo_pedido }}</td>
           <td style="background-color:whitesmoke; color:#210B2C; text-align:center;">{{ pedido.descripcion_pedido }}</td>
