@@ -109,19 +109,14 @@ def agregar_pedido():
 
 @app.route('/ver-pedidos', defaults={'pagina': 1})
 @app.route('/ver-pedidos/<int:pagina>')
-def verPedidos(pagina):
-    entra = 0
-    por_pagina = 5
-    primero = (pagina-1)*por_pagina
-    ultimo = pagina*por_pagina
+def ver_pedidos(pagina):
     data = []
-    ordenes = db.getOrders(primero, ultimo)
-    for pedido in ordenes:
-        entra += 1
-        pedido_id, comuna_id, tipo, descripcion, cantidad, nombre, _, _ = pedido
-        comns = db.getComuna(comuna_id)
-        for c in comns:
-            comuna_nomb = c[0]
+    por_pagina = 5
+    offset = (pagina - 1) * por_pagina
+    pedidos = db.getOrders(por_pagina, offset)
+
+    for p in pedidos:
+        pedido_id, comuna_nomb, tipo, descripcion, cantidad, nombre = p
         data.append({
             "id_pedido": pedido_id,
             "comuna_pedido": comuna_nomb,
@@ -130,13 +125,17 @@ def verPedidos(pagina):
             "cantidad_pedido": cantidad,
             "nombre_pedido": nombre
         })
-    prev_page = pagina - 1
-    next_page = pagina + 1
-    if prev_page <= 0:
-        prev_page = 1
-    if(ordenes == () or entra<5):
-        next_page -= 1
-    return render_template('ver-pedidos.html', data=data, next_page=next_page, prev_page=prev_page)
+
+    pag_ant = pagina - 1
+    pag_sgte = pagina + 1
+
+    if pag_ant < 1:
+        pag_ant = 1
+    
+    if len(pedidos) < por_pagina:
+        pag_sgte = pagina
+
+    return render_template('ver-pedidos.html', data=data, pagina=pagina, pag_sgte=pag_sgte, pag_ant=pag_ant)
 
 
 @app.route('/ver-donaciones', defaults={'pagina': 1})

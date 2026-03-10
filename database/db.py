@@ -75,7 +75,7 @@ def getComuna(id):
 def getOrders(start, finish):
     conn = get_conn()
     cursor = conn.cursor()
-    cursor.execute(QUERY_DICT["orders"], (start, finish))
+    cursor.execute(QUERY_DICT["pedidos"], (start, finish))
     pedidos = cursor.fetchall()
     return pedidos
 
