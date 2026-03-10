@@ -1,146 +1,165 @@
 // Validación del formulario de pedidos
 
 const validarEmail = (email) => {
-    if(!email) return false;
-  
-    let re = /^[\w.]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-    let formato = re.test(email);
-  
-    return formato;
-  };
-  
-  const validarCelular = (celular) => {  
-    if(!celular) return true;
+  if (!email) return false;
 
-    largoValido = (celular.length == 9);
-    let re = /^[0-9]+$/;
-    let formato = re.test(celular);
-  
-    return largoValido && formato;
-  };
-  
-  const validarRegion = (region) => {
-    return(region);
-  };
-  
-  const validarComuna = (comuna) => {
-    return(comuna);
-  };
-  
-  const validarTipo = (tipo) => {
-    return(tipo);
-  };
-  
-  const validarCantidad = (cantidad) => {
-    return (cantidad);
-  };
-  
-  const validarNombre = (nombre) => {
-    if(!nombre) return false;
-  
-    let largoValido = nombre.length >= 3 && nombre.length <= 80;
-    
-    let re = /^[a-zA-Z]+[a-zA-z|\s]+$/;
-    let formato = re.test(nombre);
-  
-    return formato && largoValido;
-  };
-  
-  const validarDescripcion = (descripcion) => {
-    if(!descripcion) return false;
-    return (descripcion.length <= 250); 
+  let re = /^[\w.]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+  return re.test(email);
+};
+
+const validarCelular = (celular) => {
+  if (!celular) return true; // opcional
+
+  let largoValido = celular.length === 9;
+  let re = /^[0-9]+$/;
+
+  return largoValido && re.test(celular);
+};
+
+const validarRegion = (region) => {
+  return region !== "";
+};
+
+const validarComuna = (comuna) => {
+  return comuna !== "";
+};
+
+const validarTipo = (tipo) => {
+  return tipo !== "";
+};
+
+const validarCantidad = (cantidad) => {
+  if (!cantidad) return false;
+
+  let re = /^[0-9]+\s?(kg|g|unidad|unidades|cajas)?$/i;
+  return re.test(cantidad);
+};
+
+const validarNombre = (nombre) => {
+  if (!nombre) return false;
+
+  let largoValido = nombre.length >= 3 && nombre.length <= 80;
+  let re = /^[a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+$/;
+
+  return largoValido && re.test(nombre);
+};
+
+const validarDescripcion = (descripcion) => {
+  if (!descripcion) return false;
+  return descripcion.length <= 250;
+};
+
+function irInicio(){
+  location.href = "/";
+}
+
+const validateForm = (event) => {
+
+  event.preventDefault();
+
+  let myForm = document.forms["login-form"];
+
+  let nombre = myForm["nombre"].value;
+  let email = myForm["email"].value;
+  let celular = myForm["celular"].value;
+  let region = myForm["region"].value;
+  let comuna = myForm["comuna"].value;
+  let tipo = myForm["tipo"].value;
+  let descripcion = myForm["descripcion"].value;
+  let cantidad = myForm["cantidad"].value;
+
+  let invalidInputs = [];
+
+  const setInvalidInput = (inputName) => {
+    invalidInputs.push(inputName);
   };
 
-  function irInicio(){
-    location.href = "../html/inicio.html"; 
-  };
+  if (!validarNombre(nombre)) {
+    setInvalidInput("Nombre (mínimo 3 caracteres)");
+  }
 
-  const validateForm = () => {
-    let myForm = document.forms["login-form"];
-    let nombre = myForm["nombre"].value;
-    let email = myForm["email"].value;
-    let celular = myForm["celular"].value;
-    let region = myForm["region"].value;
-    let comuna = myForm["comuna"].value;
-    let tipo = myForm["tipo"].value;
-    let descripcion = myForm["descripcion"].value;
-    let cantidad = myForm["cantidad"].value;
-  
-    let invalidInputs = [];
-    let isValid = true;
-    const setInvalidInput = (inputName) => {
-      invalidInputs.push(inputName);
-      isValid &&= false;
-    };
-    
-    if(!validarNombre(nombre)){
-      setInvalidInput("Nombre");
-    }
-    if(!validarEmail(email)){
-      setInvalidInput("Email");
-    }
-    if(!validarCelular(celular)){
-      setInvalidInput("Celular");
-    }
-    if(!validarRegion(region)){
-      setInvalidInput("Región: Debe seleccionar una");
-    }
-    if(!validarComuna(comuna)){
-      setInvalidInput("Comuna: Debe seleccionar una");
-    }
-    if(!validarTipo(tipo)){
-      setInvalidInput("Tipo: Debe seleccionar uno");
-    }
-    if(!validarDescripcion(descripcion)){
-      setInvalidInput("Descripción");
-    }
-    if(!validarCantidad(cantidad)){
-      setInvalidInput("Cantidad");
-    }
-  
-    let validationBox = document.getElementById("val-box");
-    let validationMessageElem = document.getElementById("val-msg");
-    let validationListElem = document.getElementById("val-list");
-  
-    if (!isValid) {
-      validationListElem.textContent = "";
-      // add invalid elements to val-list element.
-      for (input of invalidInputs) {
-        let listElement = document.createElement("li");
-        listElement.innerText = input;
-        validationListElem.append(listElement);
-      }
-      // set val-msg
-      validationMessageElem.innerText = "Los siguiente campos son invalidos:";
-  
-      // make validation prompt visible
-      validationBox.hidden = false;
-      window.scrollTo(0, 0);
-  
-    } else {
-      let conf = document.getElementById("confirmar");
-      let btn_envio = document.getElementById("envio");
-      let no = document.getElementById("no");
-  
-      btn_envio.hidden = true;
-      conf.hidden = false;
-  
-      no.addEventListener("click", function(){
-        conf.hidden = true;
-        btn_envio.hidden = false;
+  if (!validarEmail(email)) {
+    setInvalidInput("Email inválido");
+  }
+
+  if (!validarCelular(celular)) {
+    setInvalidInput("Celular (debe tener 9 dígitos)");
+  }
+
+  if (!validarRegion(region)) {
+    setInvalidInput("Región (debe seleccionar una)");
+  }
+
+  if (!validarComuna(comuna)) {
+    setInvalidInput("Comuna (debe seleccionar una)");
+  }
+
+  if (!validarTipo(tipo)) {
+    setInvalidInput("Tipo de alimento");
+  }
+
+  if (!validarDescripcion(descripcion)) {
+    setInvalidInput("Descripción (máximo 250 caracteres)");
+  }
+
+  if (!validarCantidad(cantidad)) {
+    setInvalidInput("Cantidad (ej: 2 kg, 5 unidades)");
+  }
+
+  // Si hay errores
+  if (invalidInputs.length > 0) {
+
+    let listaErrores = "<ul style='text-align:left'>";
+
+    invalidInputs.forEach((error) => {
+      listaErrores += `<li>${error}</li>`;
+    });
+
+    listaErrores += "</ul>";
+
+    Swal.fire({
+      title: "Formulario con errores",
+      html: listaErrores,
+      icon: "error",
+      confirmButtonText: "Corregir"
+    });
+
+    return;
+  }
+
+  // Confirmación antes de enviar
+
+  Swal.fire({
+    title: "¿Confirmar pedido?",
+    text: "¿Desea registrar este pedido?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Sí, enviar",
+    cancelButtonText: "Cancelar"
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      Swal.fire({
+        title: "Pedido registrado",
+        text: "Su pedido ha sido enviado correctamente",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false
       });
-    }
-  };
-  
-  let submitBtn = document.getElementById("envio");
-  submitBtn.addEventListener("click", validateForm);
 
-  function aumentar(foto){
-    if(foto.width == "640"){
-      foto.style.width = "1280px";
-      foto.style.height = "1024px"
-    } else if(foto.width == "1280"){
-      foto.style.width = "640px";
-      foto.style.height = "480px";
-    } 
-  };
+      setTimeout(() => {
+        myForm.submit();
+      }, 2000);
+
+    }
+
+  });
+
+};
+
+let submitBtn = document.getElementById("envio");
+
+if (submitBtn) {
+  submitBtn.addEventListener("click", validateForm);
+;}

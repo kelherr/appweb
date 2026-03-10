@@ -1,70 +1,63 @@
-.box {
-  background-color: #c6ff6b;
-}
-.grupo-botones {
-  background-image: linear-gradient(to left top, #cce942, #beec47, #b0ee4d, 
-  #a0f054, #8ff25c, #98ec54, #9fe54c, #a6df45, #bfcf34, #d1be2e, 
-  #ddad33, #e59c3d);
-  border: 3px solid #e59c3d;
-  border-radius: 50%;
-  max-width: 400px;
-  margin: 2% auto;
-  padding: 2rem;
-  padding-top: 2rem;
-  text-align: center;
+:root {
+  --color-primary: #210B2C;
+  --color-accent: #AE759F;
+  --color-secondary: #55286f;
+  --color-soft: #D8B4E2;
+  --color-light: #BC96E6;
 }
 
-.mensaje, p {
-  font-family: "Lucida Console", "Courier New", monospace;
-  text-align: center;
-  color: darkred;
-  font-size: large;
-  background-color: whitesmoke;
-  width: 40%;
+body {
+  background-color: var(--color-light);
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-.boton {
-  border-radius:40px;
-  display: flex;
-  border: 1px solid #e59c3d;
-  background-color: #ffc95e;
-  color: black;
-  font-family: "Lucida Console", "Courier New", monospace;
-  font-size: 1.4rem;
+.navbar {
+  background-color: var(--color-primary) !important;
+}
+
+.navbar-brand {
+  color: whitesmoke;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.navbar-toggler {
+  color: var(--color-secondary);
+  background-color: var(--color-soft);
+}
+
+.nav-link {
+  color: var(--color-soft);
+}
+
+.nav-link:hover {
+  color: var(--color-accent) !important;
+}
+
+.map-wrapper{
+  position: relative;
+  width: 100%;
+  max-width: 1600px;
+  margin: auto;
+}
+
+#map{
+  height: 92vh;
+  min-height: 400px;
+  border: 1px solid var(--color-primary);
+  border-radius: 8px;
+}
+
+.map-title{
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.9);
+  padding: 6px 14px;
+  border-radius: 8px;
   font-weight: 600;
-  margin: 0 auto;
-  padding: 0.5rem 1rem;
-  text-transform: uppercase;
-  width: 40%;
-  text-decoration: none;
-}
-
-.back {
-  border-radius:40px;
-  border: 1px solid #e59c3d;
-  background-color: #ffc95e;
-  color: black;
-  font-family: "Lucida Console", "Courier New", monospace;
-  font-size: 1.4rem;
-  font-weight: 600;
-  margin: 0 auto;
-  padding: 0.5rem 0.5rem;
-  text-transform: uppercase;
-  width: 60%;
-  text-decoration: none;
-}
-
-.boton:hover, .back:hover {
-  color : green;
-}
-
-.titulo {
-  font-family: "Lucida Console", "Courier New", monospace;
-  text-align: center;
-  text-decoration: underline;
-}
-
-#map { 
-  height: 600px; 
-  border: 3px solid  #e59c3d;
+  color: var(--color-primary);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 1000;
 }

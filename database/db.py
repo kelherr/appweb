@@ -75,7 +75,7 @@ def getComuna(id):
 def getOrders(start, finish):
     conn = get_conn()
     cursor = conn.cursor()
-    cursor.execute(QUERY_DICT["orders"], (start, finish))
+    cursor.execute(QUERY_DICT["pedidos"], (start, finish))
     pedidos = cursor.fetchall()
     return pedidos
 
@@ -85,13 +85,14 @@ def getDonations(start, finish):
     cursor.execute(QUERY_DICT["donations"], (start, finish))
     donaciones = cursor.fetchall()
     return donaciones
-    
+
 def getPictures(id):
     conn = get_conn()
     cursor = conn.cursor()
     cursor.execute(QUERY_DICT["prim_foto"], id)
     foto = cursor.fetchone()
     return foto
+
 
 def infoOrder(id):
     conn = get_conn()
@@ -114,36 +115,6 @@ def infoDonationPhoto(id):
     fotos = cursor.fetchall()
     return fotos
 
-"""def cantFruta(opcion):
-    conn = get_conn()
-    cursor = conn.cursor()
-    if opcion == 'donacion':
-        cursor.execute(QUERY_DICT["fruta_don"])
-    else:
-        cursor.execute(QUERY_DICT["fruta_ped"])
-    cant = cursor.fetchone()
-    return cant
-
-def cantVerdura(opcion):
-    conn = get_conn()
-    cursor = conn.cursor()
-    if opcion == 'donacion':
-        cursor.execute(QUERY_DICT["verdura_don"])
-    else:
-        cursor.execute(QUERY_DICT["verdura_ped"])
-    cant = cursor.fetchone()
-    return cant
-
-def cantOtro(opcion):
-    conn = get_conn()
-    cursor = conn.cursor()
-    if opcion == 'donacion':
-        cursor.execute(QUERY_DICT["otro_don"])
-    else:
-        cursor.execute(QUERY_DICT["otro_ped"])
-    cant = cursor.fetchone()
-    return cant"""
-
 def numOrders():
     conn = get_conn()
     cursor = conn.cursor()
@@ -155,5 +126,19 @@ def numDonations():
     conn = get_conn()
     cursor = conn.cursor()
     cursor.execute(QUERY_DICT["donation_by_type"])
+    cant = cursor.fetchall()
+    return cant
+
+def pedidos_mapa():
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(QUERY_DICT["pedidos_mapa"])
+    cant = cursor.fetchall()
+    return cant
+
+def donaciones_mapa():
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(QUERY_DICT["donaciones_mapa"])
     cant = cursor.fetchall()
     return cant

@@ -17,9 +17,8 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 def inicio():
     return render_template('inicio.html')
 
-
-@app.route('/agregar-donacion', methods=["GET", "POST"])
-def agregarDonacion():
+@app.route('/agregar-donacion', methods=['GET','POST'])
+def agregar_donacion():
     error = None
     if request.method == 'POST':
         nombre = request.form.get('nombre')
@@ -37,64 +36,55 @@ def agregarDonacion():
         foto2 = request.files.get('foto-2')
         foto3 = request.files.get('foto-3')
 
-        if validar_donacion(nombre, email, region, comuna, calle, celular, 
-                        cantidad, tipo, fecha, foto1, foto2, foto3):               
-            
-            donacion = db.addDonation(comuna, region, calle, tipo, cantidad, fecha, 
-                            descripcion, condiciones, nombre, email, celular)            
-            if donacion:
-                if foto1.filename != "":
-                    _filename = hashlib.sha256(
-                        secure_filename(foto1.filename).encode("utf-8")
-                    ).hexdigest()
-                    _extension = filetype.guess(foto1).extension
-                    img_filename = f"{_filename}.{_extension}"
-                    _path = os.path.join(app.config['UPLOAD_FOLDER'], img_filename)
-                    foto1.save(_path)
-                    path_db = 'img/'+ img_filename
-                    id_donation = db.getIdDonation()
-                    result = db.addImage(path_db, img_filename, id_donation)
-                    if not result:
-                        error = 'La solicitud no puede ser procesada'
-                        return render_template('/agregar-donacion', error=error)
-                
-                if foto2.filename != "":
-                    _filename = hashlib.sha256(
-                        secure_filename(foto2.filename).encode("utf-8")
-                    ).hexdigest()
-                    _extension = filetype.guess(foto2).extension
-                    img_filename = f"{_filename}.{_extension}"
-                    _path = os.path.join(app.config['UPLOAD_FOLDER'], img_filename)
-                    foto2.save(_path)
-                    path_db = 'img/'+ img_filename
-                    id_donation = db.getIdDonation()
-                    result = db.addImage(path_db, img_filename, id_donation)
-                    if not result:
-                        error = 'La solicitud no puede ser procesada'
-                        return render_template('/agregar-donacion', error=error)
-
-                if foto3.filename != "":
-                    _filename = hashlib.sha256(
-                        secure_filename(foto3.filename).encode("utf-8")
-                    ).hexdigest()
-                    _extension = filetype.guess(foto3).extension
-                    img_filename = f"{_filename}.{_extension}"
-                    _path = os.path.join(app.config['UPLOAD_FOLDER'], img_filename)
-                    foto3.save(_path)
-                    path_db = 'img/'+ img_filename
-                    id_donation = db.getIdDonation()
-                    result = db.addImage(path_db, img_filename, id_donation)
-                    if not result:
-                        error = 'La solicitud no puede ser procesada' 
-                        return render_template('/agregar-donacion', error=error)
-                flash('¡Hemos recibido su donación!')
-                return redirect(url_for('inicio'))              
-            else:
+        # validar datos
+        if validar_donacion(
+            nombre, email, region, comuna, calle,
+            celular, cantidad, tipo, fecha,
+            foto1, foto2, foto3
+        ):
+            donacion = db.addDonation(comuna, region, calle, tipo, cantidad, fecha, descripcion, 
+                                      condiciones, nombre, email, celular)
+            if not donacion:
                 error = "La solicitud no puede ser procesada"
+                return render_template('agregar-donacion.html', error=error)
+
+            # obtener id de la donación
+            id_donation = db.getIdDonation()
+            fotos = [foto1, foto2, foto3]
+            for foto in fotos:
+                if foto and foto.filename != "":
+                    filename_seguro = secure_filename(foto.filename)
+                    hash_nombre = hashlib.sha256(
+                        filename_seguro.encode("utf-8")
+                    ).hexdigest()
+                    tipo_archivo = filetype.guess(foto)
+                    if not tipo_archivo:
+                        error = "Tipo de archivo no válido"
+                        return render_template('agregar-donacion.html', error=error)
+                    extension = tipo_archivo.extension
+                    img_filename = f"{hash_nombre}.{extension}"
+                    ruta_guardado = os.path.join(
+                        app.config['UPLOAD_FOLDER'],
+                        img_filename
+                    )
+                    foto.save(ruta_guardado)
+                    path_db = 'img/' + img_filename
+                    resultado = db.addImage(
+                        path_db,
+                        img_filename,
+                        id_donation
+                    )
+                    if not resultado:
+                        error = 'La solicitud no puede ser procesada'
+                        return render_template('agregar-donacion.html', error=error)
+            flash('¡Hemos recibido su donación!', 'success')
+            return redirect(url_for('inicio'))
+        else:
+            error = "Datos inválidos"
     return render_template('agregar-donacion.html', error=error)
 
 @app.route('/agregar-pedido', methods=["GET", "POST"])
-def agregarPedido():
+def agregar_pedido():
     error = None
     if request.method == 'POST':
         nombre = request.form.get('nombre')
@@ -109,27 +99,24 @@ def agregarPedido():
         if validar_pedido(email, celular, region, comuna, tipo, cantidad, nombre, descripcion):
             result = db.addOrder(email, celular, region, comuna, tipo, cantidad, nombre, descripcion)
             if result:
-                flash('¡Hemos recibido su pedido!')
+                flash('¡Hemos recibido su pedido!', 'success')
                 return redirect(url_for('inicio'))
             else:
-                error = "La solicitud no puede ser procesada"
-    return render_template('agregar-pedido.html', error=error)        
+                flash('La solicitud no puede ser procesada', 'error')
+        else:
+            flash('Datos inválidos en el formulario', 'error')
+    return render_template('agregar-pedido.html')        
 
 @app.route('/ver-pedidos', defaults={'pagina': 1})
 @app.route('/ver-pedidos/<int:pagina>')
-def verPedidos(pagina):
-    entra = 0
-    por_pagina = 5
-    primero = (pagina-1)*por_pagina
-    ultimo = pagina*por_pagina
+def ver_pedidos(pagina):
     data = []
-    ordenes = db.getOrders(primero, ultimo)
-    for pedido in ordenes:
-        entra += 1
-        pedido_id, comuna_id, tipo, descripcion, cantidad, nombre, _, _ = pedido
-        comns = db.getComuna(comuna_id)
-        for c in comns:
-            comuna_nomb = c[0]
+    por_pagina = 5
+    offset = (pagina - 1) * por_pagina
+    pedidos = db.getOrders(por_pagina, offset)
+
+    for p in pedidos:
+        pedido_id, comuna_nomb, tipo, descripcion, cantidad, nombre = p
         data.append({
             "id_pedido": pedido_id,
             "comuna_pedido": comuna_nomb,
@@ -138,59 +125,59 @@ def verPedidos(pagina):
             "cantidad_pedido": cantidad,
             "nombre_pedido": nombre
         })
-    prev_page = pagina - 1
-    next_page = pagina + 1
-    if prev_page <= 0:
-        prev_page = 1
-    if(ordenes == () or entra<5):
-        next_page -= 1
-    return render_template('ver-pedidos.html', data=data, next_page=next_page, prev_page=prev_page)
+
+    pag_ant = pagina - 1
+    pag_sgte = pagina + 1
+
+    if pag_ant < 1:
+        pag_ant = 1
+    
+    if len(pedidos) < por_pagina:
+        pag_sgte = pagina
+
+    return render_template('ver-pedidos.html', data=data, pagina=pagina, pag_sgte=pag_sgte, pag_ant=pag_ant)
 
 
 @app.route('/ver-donaciones', defaults={'pagina': 1})
 @app.route('/ver-donaciones/<int:pagina>')
-def verDonaciones(pagina):
-    entra = 0
+def ver_donaciones(pagina):
     por_pagina = 5
-    primero = (pagina-1)*por_pagina
-    ultimo = pagina*por_pagina
+    offset = (pagina - 1) * por_pagina
+    donaciones = db.getDonations(por_pagina, offset)
     data = []
-    donaciones = db.getDonations(primero, ultimo)
-    for donacion in donaciones:
-        entra += 1
-        id_don, comuna_id, _, tipo, cantidad, fecha_disponibilidad, _, _, nombre, _, _ = donacion
-        comns = db.getComuna(comuna_id)
-        foto = db.getPictures(id_don)
-        _, ruta_archivo, _, _ = foto
-        for c in comns:
-            comuna_nomb = c[0]
+    for d in donaciones:
+        id_don, comuna, tipo, cantidad, fecha, nombre, ruta = d
+        
         data.append({
             "id_donacion": id_don,
-            "comuna_donacion": comuna_nomb,
+            "comuna_donacion": comuna,
             "tipo_donacion": tipo,
             "cantidad_donacion": cantidad,
-            "fecha_donacion": fecha_disponibilidad,
+            "fecha_donacion": fecha,
             "nombre_donacion": nombre,
-            "ruta_foto": ruta_archivo
+            "ruta_foto": ruta
         })
+    
+    pag_ant = pagina - 1
+    pag_sgte = pagina + 1
 
-    prev_page = pagina - 1
-    next_page = pagina + 1
-    if prev_page <= 0:
-        prev_page = 1
-    if(donaciones == () or entra<5):
-        next_page -= 1
-    return render_template('ver-donaciones.html', data=data, next_page=next_page, prev_page=prev_page)
+    if pag_ant < 1:
+        pag_ant = 1
+    
+    if len(donaciones) < por_pagina:
+        pag_sgte = pagina
+
+    return render_template('ver-donaciones.html', data=data, pagina=pagina, pag_sgte=pag_sgte, pag_ant=pag_ant)
+
+
 
 @app.route('/información-pedido')
 @app.route('/informacion-pedido/<int:id_p>')
-def informacionPedido(id_p):
+def informacion_pedido(id_p):
     data = []
     pedido = db.infoOrder(id_p)
-    _, comuna_id, tipo, descripcion, cantidad, nombre, email, celular = pedido
-    comns = db.getComuna(comuna_id)
-    for c in comns:
-        comuna_nomb = c[0]
+    _, comuna_nomb, tipo, descripcion, cantidad, nombre, email, celular = pedido
+    
     data.append({
         "info_comuna": comuna_nomb,
         "info_tipo": tipo,
@@ -204,20 +191,13 @@ def informacionPedido(id_p):
 
 @app.route('/información-donacion')
 @app.route('/informacion-donacion/<int:id_d>')
-def informacionDonacion(id_d):
+def informacion_donacion(id_d):
     data = []
     data_fotos = []
     donacion = db.infoDonation(id_d)
     fotos = db.infoDonationPhoto(id_d)
-    _, comuna_id, calle, tipo, cantidad, fecha, descripcion, condiciones, nombre, email, celular = donacion
-    comns = db.getComuna(comuna_id)
-    for c in comns:
-        comuna_nomb = c[0]
-    for f in fotos:
-        _, ruta_archivo, _, _ = f
-        data_fotos.append({
-            "info_ruta": ruta_archivo
-        })
+    _, comuna_nomb, calle, tipo, cantidad, fecha, descripcion, condiciones, nombre, email, celular = donacion
+  
     data.append({
         "info_comuna": comuna_nomb,
         "info_calle": calle,
@@ -230,6 +210,14 @@ def informacionDonacion(id_d):
         "info_email": email,
         "info_celular": celular  
     })
+
+    for f in fotos:
+        _, ruta_archivo, nombre_archivo, _ = f
+        data_fotos.append({
+            "info_ruta": ruta_archivo,
+            "info_archivo": nombre_archivo 
+        })
+
     return render_template('informacion-donacion.html', data=data, data_fotos=data_fotos)
 
 @app.route('/estadisticas', methods=["GET"])
@@ -251,22 +239,17 @@ def obtenerDatos():
 
 @app.route('/obtener-mapa', methods=["GET"])
 @cross_origin(origin="localhost", supports_credentials=True)
-def obtenerMapa():
+def obtener_mapa():
     total = []
     info_pedidos = []
     info_donaciones = []
-    ultimos_pedidos = db.getOrders(0, 5)
-    ultimas_donaciones = db.getDonations(0, 5)
-    for pedido in ultimos_pedidos:
-        #el popup debe mostrar el ID, tipo, cantidad y el email del solicitante.
-        id_p, comuna_id, tipo, _, cantidad, _, email, _ = pedido
-        comns = db.getComuna(comuna_id)
-        for c in comns:
-            comuna_nomb = c[0]
+    pedidos = db.pedidos_mapa()
+    donaciones = db.donaciones_mapa()
+
+    for p in pedidos:
+        id_p, comuna_nomb, tipo, cantidad, email = p
         coord = search_comuna(comuna_nomb)
-        if coord == None:
-            continue
-        else:
+        if coord is not None:
             (lng, lat) = coord
             info_pedidos.append({
                 "id_pedido": id_p,
@@ -277,33 +260,28 @@ def obtenerMapa():
                 "lat_pedido": lat,
                 "comuna_pedido": comuna_nomb,
             })
-
+        
     total.append(info_pedidos)
 
-    for donacion in ultimas_donaciones:
-        id_d, comuna_d, calle_numero, tipo, cantidad, fecha_disponibilidad, _, _, _, email, _ = donacion
-        comns = db.getComuna(comuna_d)
-        for c in comns:
-            comuna_nomb = c[0]
-        coord = search_comuna(comuna_nomb)
-        if coord == None:
-            continue
-        else:
-            (lng, lat) = coord
+    for d in donaciones:
+        id_d, c_n, calle_numero, tipo_p, cantidad_p, fecha_disponibilidad, email_p= d
+        coord = search_comuna(c_n)
+        if coord is not None:
+            (lng_p, lat_p) = coord
             info_donaciones.append({
                 "id_donacion": id_d,
                 "calle_numero": calle_numero,
-                "tipo_donacion": tipo,
-                "cantidad_donacion": cantidad,
-                "email_donacion": email,
+                "tipo_donacion": tipo_p,
+                "cantidad_donacion": cantidad_p,
+                "email_donacion": email_p,
                 "fecha_donacion": fecha_disponibilidad,
-                "lng_donacion": lng,
-                "lat_donacion": lat,
-                "comuna_donacion": comuna_nomb,
+                "lng_donacion": lng_p,
+                "lat_donacion": lat_p,
+                "comuna_donacion": c_n,
             })
-    total.append(info_donaciones)
 
+    total.append(info_donaciones)
     return jsonify(total)
-    
+
 if __name__ == "__main__":
     app.run(debug=True, port=8007)

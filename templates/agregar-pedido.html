@@ -2,82 +2,86 @@
 <html lang="es">
   <head>
     <meta charset="utf-8">
-    <title>{% block title %} Agregar Pedido {% endblock %}</title>
-    {% block css %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/formularios.css') }}">
-    {% endblock %}
+    <title>{% block title %}Agregar Pedido{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/inicio.css') }}">
   </head>
 
-{% block content %} 
-<body class="box">
-  {%if error %}
-  <div>
-    <h2>{{ error }}</h2>
-  </div>
-  {% endif %}
-  <div class="main-container">
-    <div id="val-box" class="val" hidden>
-      <h2 id="val-msg">_</h2>
-      <u1 id="val-list"></u1>
+  {% block content %}
+  <body>
+  {% include 'navbar.html' %}
+
+    <div class="container mt-4 mb-5">
+      <h2 class="mb-4">Agregar Pedido</h2>
+      <form id="login-form" method="post">
+        <h5 class="mt-4">Datos Solicitante</h5>
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label class="form-label">Nombre</label>
+            <input class="form-control" id="nombre" name="nombre" type="text" placeholder="Juan Pérez">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Email</label>
+            <input class="form-control" id="email" name="email" type="text" placeholder="ejemplo@mail.com">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Celular</label>
+            <input class="form-control" id="celular" name="celular" type="text" placeholder="912345678">
+          </div>
+        </div>
+
+        <h5 class="mt-4">Dirección</h5>
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label class="form-label">Región</label>
+            <select class="form-select" id="region" name="region">
+              <option value="">--</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Comuna</label>
+            <select class="form-select" id="comuna" name="comuna">
+              <option value="">--</option>
+            </select>
+          </div>
+        </div>
+
+        <h5 class="mt-4">Datos Pedido</h5>
+        <div class="row mb-3">
+          <div class="col-md-3">
+            <label class="form-label">Tipo</label>
+            <select class="form-select" id="tipo" name="tipo">
+              <option value="">--</option>
+              <option value="fruta">Fruta</option>
+              <option value="verdura">Verdura</option>
+              <option value="otros">Otro</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Cantidad</label>
+            <input class="form-control" id="cantidad" name="cantidad" type="text" placeholder="20 kg">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Descripción</label>
+            <input class="form-control" id="descripcion" name="descripcion" type="text">
+          </div>
+        </div>
+        <div class="mt-4">
+          <button class="btn btn-primary" type="button" id="envio">
+            Agregar Pedido
+          </button>
+        </div>
+      </form>
     </div>
-    <form id="login-form" class="formulario" method="post" enctype="multipart/form-data">
-      <h3>Datos Solicitante</h3>
-      <div id="nombre-input" class="grupo-input">
-        <label for="nombre">Nombre</label>
-        <input id="nombre" name="nombre" type="text" size="80" required>
-      </div>
-      <div id="email-input" class="grupo-input">
-        <label for="email">Email</label>
-        <input id="email" name="email" type="text" size="30" required>
-      </div>
-      <div id="celular-input" class="grupo-input">
-        <label for="celular">Teléfono celular</label>
-        <input id="celular" name="celular" type="text" size="15">
-      </div>
-      <h3>Dirección</h3>
-      <div class="grupo-input">
-        <label for="region">Región</label>
-        <select id="region" name="region">
-          <option value="" selected="selected">--</option>
-        </select>
-      </div>
-      <div class="grupo-input">
-        <label for="comuna">Comuna</label>
-        <select id="comuna" name="comuna">
-          <option value="" selected="selected">--</option>
-        </select>
-      </div> 
-      <h3>Datos Pedido</h3>
-      <div id="tipo-input" class="grupo-input">
-        <label for="tipo">Tipo de Pedido</label>
-        <select name="tipo" id="tipo">
-          <option value="fruta">Fruta</option>
-          <option value="verdura">Verdura</option>
-          <option value="otros">Otro</option>
-        </select>
-      </div>
-      <div id="descripcion-input" class="grupo-input">
-        <label for="descripcion">Descripción</label>
-        <input id="descripcion" name="descripcion" type="text" size="80">
-      </div>
-      <div id="cantidad-input" class="grupo-input">
-        <label for="cantidad">Cantidad</label>
-        <input id="cantidad" name="cantidad" type="text" size="10" required>
-      </div>
-      <div class="boton">
-        <button class="enviar" type="button" id="envio">Agregar Pedido</button>
-      </div>
-      <div class="btn-conf" id="confirmar" hidden>
-        <p id="msg">¿Confirma que desea agregar este pedido?</p>
-        <button id="no" class="enviar">No, quiero volver al formulario</button>
-        <button id="si" class="enviar" type="submit">Si, confirmo</button>
-      </div>
-    </form>
-  </div>  
-</body>
-{% endblock %}
-{% block javascript %}
-<script lang="javascript" src="{{ url_for('static', filename='js/regiones-comunas.js') }}"></script>
-<script lang="javascript" src="{{ url_for('static', filename='js/validacion-pedido.js') }}"></script>
-{% endblock %}
+
+    {% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
+    crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script lang="javascript" src="{{ url_for('static', filename='js/regiones-comunas.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/validacion-pedido.js') }}"></script>
+    {% endblock %}
+  </body>
+  {% endblock content %}
 </html>

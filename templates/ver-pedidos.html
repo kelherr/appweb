@@ -2,44 +2,63 @@
 <html lang="es">
   <head>
     <meta charset="utf-8">
-    <title>{% block title %} Lista Pedidos {% endblock %}</title>
+    <title>{% block title %} Lista de Pedidos {% endblock %}</title>
     {% block css %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/tablas.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/inicio.css') }}">
     {% endblock %}
   </head>
-
-  {% block content %} 
-  <body class="box">
-
-      <table class="tabla">
-        <thead>
+  
+  {% block content %}
+  <body>
+  {% include 'navbar.html' %}
+    <div class="container mt-4 mb-5">
+      <h3 class="mb-4">Listado de Pedidos</h3>
+      <table class="table table-hover" style="border-radius:12px; overflow:hidden;">
+        <thread>
           <tr>
-            <th>Comuna</th>
-            <th>Tipo</th>
-            <th>Descripción</th>
-            <th>Cantidad</th>
-            <th>Nombre Solicitante</th>
+            <th scope="col" style="background-color:#55286f; color:#D8B4E2; text-align:center;">Comuna</th>
+            <th scope="col" style="background-color:#55286f; color:#D8B4E2; text-align:center;">Tipo</th>
+            <th scope="col" style="background-color:#55286f; color:#D8B4E2; text-align:center;">Descripción</th>
+            <th scope="col" style="background-color:#55286f; color:#D8B4E2; text-align:center;">Cantidad</th>
+            <th scope="col" style="background-color:#55286f; color:#D8B4E2; text-align:center;">Nombre</th>
           </tr>
-        </thead>
-        {% if data %}
-        <tbody>
-          {% for pedido in data %}
-          <tr onclick="window.location.href = '{{ url_for('informacionPedido', id_p=pedido.id_pedido)}}';">
-            <td>{{ pedido.comuna_pedido }}</td>
-            <td>{{ pedido.tipo_pedido }}</td>
-            <td>{{ pedido.descripcion_pedido }}</td>
-            <td>{{ pedido.cantidad_pedido }}</td>
-            <td>{{ pedido.nombre_pedido }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-        {% endif %}
+      </thead>
+      {% if data %}
+      <tbody>
+        {% for pedido in data %}
+        <tr onclick="window.location.href = '{{ url_for('informacion_pedido', id_p=pedido.id_pedido)}}';">
+          <td style="background-color:whitesmoke; color:#210B2C; text-align:center;">{{ pedido.comuna_pedido }}</td>
+          <td style="background-color:whitesmoke; color:#210B2C; text-align:center;">{{ pedido.tipo_pedido }}</td>
+          <td style="background-color:whitesmoke; color:#210B2C; text-align:center;">{{ pedido.descripcion_pedido }}</td>
+          <td style="background-color:whitesmoke; color:#210B2C; text-align:center;">{{ pedido.cantidad_pedido }}</td>
+          <td style="background-color:whitesmoke; color:#210B2C; text-align:center;">{{ pedido.nombre_pedido }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      {% endif %}
       </table>
-      <div class="movement">
-       <a class="boton devolver" href="{{url_for('verPedidos', pagina=prev_page)}}">Anterior</a> 
-       <a class="boton" href="{{url_for('inicio')}}">Volver</a>
-       <a class="boton avanzar" href="{{url_for('verPedidos', pagina=next_page)}}">Siguiente</a>
-      </div>
-    </body>
+    </div>
+      <ul class="pagination justify-content-center">
+        <li class="page-item {% if pagina == 1 %}disabled{% endif %}">
+          <a class="page-link"
+            href="{{ url_for('ver_pedidos', pagina=pag_ant) }}">
+            Anterior
+          </a>
+        </li>
+        <li class="page-item {% if pag_sgte == pagina %}disabled{% endif %}">
+          <a class="page-link"
+            href="{{ url_for('ver_pedidos', pagina=pag_sgte) }}">
+            Siguiente
+          </a>
+        </li>
+      </ul>
+    </nav>
+    {% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
+    crossorigin="anonymous"></script>
     {% endblock %}
+  </body>
+  {% endblock content %}
 </html>
