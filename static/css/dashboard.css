@@ -1,5 +1,5 @@
 .card {
-  width: 18rem;
+  width: 15;
   height: 8rem;
   text-align: center;
   color:whitesmoke;
@@ -14,7 +14,8 @@
 }
 
 .chart-container {
-  width: 620px;
+  height: 50%;
+
 }
 
 .highcharts-container{

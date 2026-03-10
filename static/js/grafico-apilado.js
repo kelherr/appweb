@@ -1,10 +1,14 @@
 // Obtenido de https://www.highcharts.com/demo/highcharts/column-stacked
 Highcharts.chart('container', {
     chart: {
-        type: 'column'
+        type: 'column',
+        height: 280,
+        style: {
+          fontFamily: 'Lucida Sans',
+        }
     },
     title: {
-        text: 'Donaciones/Pedidos por tipos',
+        text: 'Productos por tipos',
         align: 'left'
     },
     xAxis: {
