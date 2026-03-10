@@ -79,13 +79,22 @@ def getOrders(start, finish):
     pedidos = cursor.fetchall()
     return pedidos
 
+"""
 def getDonations(start, finish):
     conn = get_conn()
     cursor = conn.cursor()
     cursor.execute(QUERY_DICT["donations"], (start, finish))
     donaciones = cursor.fetchall()
     return donaciones
-    
+"""
+
+def getDonations(start, finish):
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(QUERY_DICT["donations"], (start, finish))
+    donaciones = cursor.fetchall()
+    return donaciones
+
 def getPictures(id):
     conn = get_conn()
     cursor = conn.cursor()

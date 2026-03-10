@@ -6,7 +6,7 @@
   "num_donation": "SELECT MAX(id) from donacion;",
   "orders":"SELECT id, comuna_id, tipo, descripcion, cantidad, nombre_solicitante, email_solicitante, celular_solicitante FROM pedido ORDER BY id DESC LIMIT %s,%s;",
   "comuna_nombre": "SELECT nombre FROM comuna WHERE id=%s",
-  "donations": "SELECT id, comuna_id, calle_numero, tipo, cantidad, fecha_disponibilidad, descripcion, condiciones_retirar, nombre, email, celular FROM donacion ORDER BY id DESC LIMIT %s,%s;",
+  "donations": "SELECT d.id, c.nombre, d.tipo, d.cantidad, d.fecha_disponibilidad, d.nombre, f.ruta_archivo FROM donacion d JOIN comuna c ON d.comuna_id = c.id LEFT JOIN foto f ON d.id = f.donacion_id LIMIT %s OFFSET %s;",
   "prim_foto": "SELECT id, ruta_archivo, nombre_archivo, donacion_id FROM foto WHERE donacion_id=%s LIMIT 1;",
   "info_pedido" : "SELECT id, comuna_id, tipo, descripcion, cantidad, nombre_solicitante, email_solicitante, celular_solicitante FROM pedido WHERE id=%s;",
   "info_donacion": "SELECT id, comuna_id, calle_numero, tipo, cantidad, fecha_disponibilidad, descripcion, condiciones_retirar, nombre, email, celular FROM donacion WHERE id=%s;",

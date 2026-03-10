@@ -141,38 +141,36 @@ def verPedidos(pagina):
 
 @app.route('/ver-donaciones', defaults={'pagina': 1})
 @app.route('/ver-donaciones/<int:pagina>')
-def verDonaciones(pagina):
-    entra = 0
+def ver_donaciones(pagina):
     por_pagina = 5
-    primero = (pagina-1)*por_pagina
-    ultimo = pagina*por_pagina
+    offset = (pagina - 1) * por_pagina
+    donaciones = db.getDonations(por_pagina, offset)
     data = []
-    donaciones = db.getDonations(primero, ultimo)
-    for donacion in donaciones:
-        entra += 1
-        id_don, comuna_id, _, tipo, cantidad, fecha_disponibilidad, _, _, nombre, _, _ = donacion
-        comns = db.getComuna(comuna_id)
-        foto = db.getPictures(id_don)
-        _, ruta_archivo, _, _ = foto
-        for c in comns:
-            comuna_nomb = c[0]
+    for d in donaciones:
+        id_don, comuna, tipo, cantidad, fecha, nombre, ruta = d
+        
         data.append({
             "id_donacion": id_don,
-            "comuna_donacion": comuna_nomb,
+            "comuna_donacion": comuna,
             "tipo_donacion": tipo,
             "cantidad_donacion": cantidad,
-            "fecha_donacion": fecha_disponibilidad,
+            "fecha_donacion": fecha,
             "nombre_donacion": nombre,
-            "ruta_foto": ruta_archivo
+            "ruta_foto": ruta
         })
+    
+    pag_ant = pagina - 1
+    pag_sgte = pagina + 1
 
-    prev_page = pagina - 1
-    next_page = pagina + 1
-    if prev_page <= 0:
-        prev_page = 1
-    if(donaciones == () or entra<5):
-        next_page -= 1
-    return render_template('ver-donaciones.html', data=data, next_page=next_page, prev_page=prev_page)
+    if pag_ant < 1:
+        pag_ant = 1
+    
+    if len(donaciones) < por_pagina:
+        pag_sgte = pagina
+
+    return render_template('ver-donaciones.html', data=data, pagina=pagina, pag_sgte=pag_sgte, pag_ant=pag_ant)
+
+
 
 @app.route('/información-pedido')
 @app.route('/informacion-pedido/<int:id_p>')
