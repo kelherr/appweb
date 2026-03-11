@@ -42,14 +42,14 @@ def agregar_donacion():
             celular, cantidad, tipo, fecha,
             foto1, foto2, foto3
         ):
-            donacion = db.addDonation(comuna, region, calle, tipo, cantidad, fecha, descripcion, 
+            donacion = db.agregar_donacion(comuna, region, calle, tipo, cantidad, fecha, descripcion, 
                                       condiciones, nombre, email, celular)
             if not donacion:
                 error = "La solicitud no puede ser procesada"
                 return render_template('agregar-donacion.html', error=error)
 
             # obtener id de la donación
-            id_donation = db.getIdDonation()
+            id_donation = db.obtener_id_donacion()
             fotos = [foto1, foto2, foto3]
             for foto in fotos:
                 if foto and foto.filename != "":
@@ -69,7 +69,7 @@ def agregar_donacion():
                     )
                     foto.save(ruta_guardado)
                     path_db = 'img/' + img_filename
-                    resultado = db.addImage(
+                    resultado = db.agregar_imagen(
                         path_db,
                         img_filename,
                         id_donation
@@ -143,7 +143,7 @@ def ver_pedidos(pagina):
 def ver_donaciones(pagina):
     por_pagina = 5
     offset = (pagina - 1) * por_pagina
-    donaciones = db.getDonations(por_pagina, offset)
+    donaciones = db.obtener_donaciones(por_pagina, offset)
     data = []
     for d in donaciones:
         id_don, comuna, tipo, cantidad, fecha, nombre, ruta = d
@@ -175,7 +175,7 @@ def ver_donaciones(pagina):
 @app.route('/informacion-pedido/<int:id_p>')
 def informacion_pedido(id_p):
     data = []
-    pedido = db.infoOrder(id_p)
+    pedido = db.info_pedido(id_p)
     _, comuna_nomb, tipo, descripcion, cantidad, nombre, email, celular = pedido
     
     data.append({
@@ -194,8 +194,8 @@ def informacion_pedido(id_p):
 def informacion_donacion(id_d):
     data = []
     data_fotos = []
-    donacion = db.infoDonation(id_d)
-    fotos = db.infoDonationPhoto(id_d)
+    donacion = db.info_donacion(id_d)
+    fotos = db.info_donacion_foto(id_d)
     _, comuna_nomb, calle, tipo, cantidad, fecha, descripcion, condiciones, nombre, email, celular = donacion
   
     data.append({
@@ -305,8 +305,8 @@ def datos_dashboard():
 def obtener_tipos():
     tipos = ["fruta", "verdura", "otro"]
 
-    pedidos = dict(db.numOrders())
-    donaciones = dict(db.numDonations())
+    pedidos = dict(db.num_pedidos())
+    donaciones = dict(db.num_donaciones())
 
     pedidos_totales = {tipo: pedidos.get(tipo, 0) for tipo in tipos}
     donaciones_totales = {tipo: donaciones.get(tipo, 0) for tipo in tipos}
