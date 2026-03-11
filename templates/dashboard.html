@@ -15,6 +15,7 @@
   <body>
   {% include 'navbar.html' %}
   <div class="container mt-4 mb-5">
+    {% if data %}
     <div class="row mb-3">
       <div class="col-md-3">
         <div class="card">
@@ -22,7 +23,7 @@
             Donaciones Totales
           </div>
           <ul class="list-group list-group-flush" style="background-color: whitesmoke;">
-            <li class="list-group-item">21</li>
+            <li class="list-group-item">{{ data.donaciones }}</li>
           </ul>
         </div>
       </div>
@@ -32,10 +33,11 @@
             Pedidos Totales
           </div>
           <ul class="list-group list-group-flush" style="background-color: whitesmoke;">
-            <li class="list-group-item">5</li>
+            <li class="list-group-item">{{ data.pedidos }}</li>
           </ul>
         </div>
       </div>
+      {% endif %}
       <div class="col-md-3">
         <div class="chart-container">
           <figure class="highcharts-figure">

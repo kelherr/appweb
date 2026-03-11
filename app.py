@@ -220,23 +220,6 @@ def informacion_donacion(id_d):
 
     return render_template('informacion-donacion.html', data=data, data_fotos=data_fotos)
 
-@app.route('/estadisticas', methods=["GET"])
-def verEstadisticas():
-    return render_template('estadisticas.html')
-
-@app.route('/obtener-datos', methods=['GET'])
-@cross_origin(origin="localhost", supports_credentials=True)
-def obtenerDatos():
-    tipos = ["fruta", "verdura", "otro"]
-
-    pedidos = dict(db.numOrders())
-    donaciones = dict(db.numDonations())
-
-    pedidos_totales = {tipo: pedidos.get(tipo, 0) for tipo in tipos}
-    donaciones_totales = {tipo: donaciones.get(tipo, 0) for tipo in tipos}
-       
-    return jsonify([pedidos_totales, donaciones_totales])
-
 @app.route('/obtener-mapa', methods=["GET"])
 @cross_origin(origin="localhost", supports_credentials=True)
 def obtener_mapa():
@@ -285,7 +268,66 @@ def obtener_mapa():
 
 @app.route('/dashboard', methods=["GET"])
 def ver_dashboard():
-    return render_template('dashboard.html')
+    total_donaciones = db.total_donaciones()[0]
+    print(total_donaciones)
+    total_pedidos = db.total_pedidos()[0]
+
+    data = {
+        "donaciones": total_donaciones,
+        "pedidos": total_pedidos 
+    }
+
+    return render_template('dashboard.html', data=data)
+
+@app.route('/region-dashboard', methods=["GET"])
+@cross_origin(origin="localhost", supports_credentials=True)
+def datos_dashboard():
+    data = {}
+    tot_donaciones = []
+    tot_pedidos = []
+
+    donaciones = db.donaciones_por_region()
+    pedidos = db.pedidos_por_region()
+
+    for i in range(0, 16):
+        tot_donaciones.append(donaciones[i][1])
+        tot_pedidos.append(pedidos[i][1])
+    
+    data = {
+        "tot_donaciones": tot_donaciones,
+        "tot_pedidos": tot_pedidos
+    }
+    
+    return data
+
+@app.route('/tipos-dashboard', methods=['GET'])
+@cross_origin(origin="localhost", supports_credentials=True)
+def obtener_tipos():
+    tipos = ["fruta", "verdura", "otro"]
+
+    pedidos = dict(db.numOrders())
+    donaciones = dict(db.numDonations())
+
+    pedidos_totales = {tipo: pedidos.get(tipo, 0) for tipo in tipos}
+    donaciones_totales = {tipo: donaciones.get(tipo, 0) for tipo in tipos}
+
+    pedidos_formato = [
+        {"name": tipo.capitalize(), "y": pedidos_totales[tipo]}
+        for tipo in tipos
+    ]
+
+    donaciones_formato = [
+        {"name": tipo.capitalize(), "y": donaciones_totales[tipo]}
+        for tipo in tipos
+    ]
+
+    data = {
+        "donaciones": donaciones_formato,
+        "pedidos": pedidos_formato
+    }
+
+    return jsonify(data)
+    
 
 if __name__ == "__main__":
     app.run(debug=True, port=8007)

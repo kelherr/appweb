@@ -1,50 +1,102 @@
-data1 = {
+fetch("http://localhost:5000/tipos-dashboard")
+  .then(response => response.json())
+  .then(data => {
 
-    chart: {
-        type: 'pie',
-        height: 130
-    },
+    const d = data.donaciones;
+    const p = data.pedidos;
 
-    title: {
-        text: 'Productos por tipo',
-        style: {
-            fontFamily: 'Lucida Sans',
-            fontSize: '14px'
-        }
-    },
+    render_grafico_donaciones(d);
+    render_grafico_pedidos(p);
 
-    tooltip: {
-        pointFormat: '<b>{point.percentage:.1f}%</b>'
-    },
+  })
+  .catch(error => console.error(error));
 
-    plotOptions: {
-        pie: {
-            innerSize: '70%',
-            size: '130%',
-            dataLabels: {
-                enabled: true,
-                format: '{point.name}',
-                style: {
-                    fontSize: '11px'
+function render_grafico_donaciones(series){
+    Highcharts.chart('container1', {
+        chart: {
+            type: 'pie',
+            height: 130
+        },
+
+        title: {
+            text: 'Donaciones por Tipo',
+            style: {
+                fontFamily: 'Lucida Sans',
+                fontSize: '14px'
+            }
+        },
+
+        tooltip: {
+            pointFormat: '<b>{point.percentage:.1f}%</b>'
+        },
+
+        plotOptions: {
+            pie: {
+                innerSize: '70%',
+                size: '130%',
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}',
+                    style: {
+                        fontSize: '11px'
+                    }
                 }
             }
+        },
+
+        series: [{
+            name: 'Donaciones',
+            data: series
+        }],
+
+        credits: {
+            enabled: false
         }
-    },
 
-    series: [{
-        name: 'Productos',
-        data: [
-            { name: 'Fruta', y: 73.86},
-            { name: 'Verdura', y: 11.97},
-            { name: 'Otro', y: 5.52}
-        ]
-    }],
+    });
+};
 
-    credits: {
-        enabled: false
-    }
+function render_grafico_pedidos(series){
+    Highcharts.chart('container2', {
+        chart: {
+            type: 'pie',
+            height: 130
+        },
 
-}
+        title: {
+            text: 'Pedidos por Tipo',
+            style: {
+                fontFamily: 'Lucida Sans',
+                fontSize: '14px'
+            }
+        },
 
-Highcharts.chart('container1', data1);
-Highcharts.chart('container2', data1);
+        tooltip: {
+            pointFormat: '<b>{point.percentage:.1f}%</b>'
+        },
+
+        plotOptions: {
+            pie: {
+                innerSize: '70%',
+                size: '130%',
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}',
+                    style: {
+                        fontSize: '11px'
+                    }
+                }
+            }
+        },
+
+        series: [{
+            name: 'Pedidos',
+            data: series
+        }],
+
+        credits: {
+            enabled: false
+        }
+
+    });
+};

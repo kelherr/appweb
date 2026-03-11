@@ -1,45 +1,58 @@
-Highcharts.chart('regiones', {
-    chart: {
-        type: 'column'
-    },
-    title: {
-        text: 'Productos por Región'
-    },
-    subtitle: {
-        text:
-            'Source: <a target="_blank" ' +
-            'href="https://www.indexmundi.com/agriculture/?commodity=corn">indexmundi</a>'
-    },
-    xAxis: {
-        categories: ['USA', 'China', 'Brazil', 'EU', 'Argentina', 'India'],
-        crosshair: true,
-        accessibility: {
-            description: 'Región'
-        }
-    },
-    yAxis: {
-        min: 0,
-        title: {
-            text: '1000 metric tons (MT)'
-        }
-    },
-    tooltip: {
-        valueSuffix: ' (1000 MT)'
-    },
-    plotOptions: {
-        column: {
-            pointPadding: 0.2,
-            borderWidth: 0
-        }
-    },
-    series: [
-        {
-            name: 'Donaciones',
-            data: [387749, 280000, 129000, 64300, 54000, 34300]
+fetch("http://localhost:5000/region-dashboard")
+  .then(response => response.json())
+  .then(data => {
+
+    const donaciones = data.tot_donaciones;
+    const pedidos = data.tot_pedidos;
+
+    render_grafico(pedidos, donaciones);
+
+  })
+  .catch(error => console.error(error));
+
+function render_grafico(pedidos, donaciones){
+    Highcharts.chart('regiones', {
+        chart: {
+            type: 'column'
         },
-        {
-            name: 'Pedidos',
-            data: [45321, 140000, 10000, 140500, 19500, 113500]
-        }
-    ]
-});
+        title: {
+            text: 'Productos por Región',
+            style: {
+                fontFamily: 'Lucida Sans'
+            }
+        },
+        xAxis: {
+            categories: ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'RM', 'XIV', 'XV', 'XVI'],
+            crosshair: true,
+            accessibility: {
+                description: 'Región'
+            },
+            title: {
+                text: 'Región'
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Cantidad'
+            }
+        },
+
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [
+            {
+                name: 'Donaciones',
+                data: donaciones
+            },
+            {
+                name: 'Pedidos',
+                data: pedidos
+            }
+        ]
+    });
+};
