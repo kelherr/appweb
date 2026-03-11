@@ -13,7 +13,7 @@ Posteriormente se realizaron mejoras al proyecto original, incluyendo cambios en
 
 - Registro de donaciones de frutas o verduras
 - Registro de pedidos de frutas o verduras
-- Visualización de donaciones y pedidos disponibles
+- Visualización de donaciones y pedidos disponibles, mediante tablas y mapa
 - Estadísticas mediante gráficos
 - Interfaz web para interactuar con el sistema
 
@@ -26,4 +26,5 @@ Posteriormente se realizaron mejoras al proyecto original, incluyendo cambios en
 - CSS
 - Bootstrap
 - JavaScript
+- Leaflet
 - Highcharts.js
