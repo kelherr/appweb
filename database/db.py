@@ -142,3 +142,31 @@ def donaciones_mapa():
     cursor.execute(QUERY_DICT["donaciones_mapa"])
     cant = cursor.fetchall()
     return cant
+
+def total_donaciones():
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(QUERY_DICT["total_donaciones"])
+    cant = cursor.fetchone()
+    return cant
+
+def total_pedidos():
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(QUERY_DICT["total_pedidos"])
+    cant = cursor.fetchone()
+    return cant
+
+def donaciones_por_region():
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(QUERY_DICT["donaciones_por_region"])
+    cant = cursor.fetchall()
+    return cant
+
+def pedidos_por_region():
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(QUERY_DICT["pedidos_por_region"])
+    cant = cursor.fetchall()
+    return cant

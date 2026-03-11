@@ -13,6 +13,10 @@
   "info_pedido" : "SELECT p.id, c.nombre, tipo, descripcion, cantidad, nombre_solicitante, email_solicitante, celular_solicitante  FROM pedido p JOIN comuna c ON c.id = p.comuna_id WHERE p.id=%s;",
   "info_donacion": "SELECT d.id, c.nombre, calle_numero, tipo, cantidad, fecha_disponibilidad, descripcion, condiciones_retirar, d.nombre, email, celular FROM donacion d JOIN comuna c ON d.comuna_id = c.id WHERE d.id = %s;",
   "info_fotos": "SELECT id, ruta_archivo, nombre_archivo, donacion_id FROM foto WHERE donacion_id=%s;",
-  "order_by_type": "SELECT tipo, COUNT(*) as total FROM pedido GROUP BY tipo;",
-  "donation_by_type": "SELECT tipo, COUNT(*) as total FROM donacion GROUP BY tipo;"
+  "order_by_type": "SELECT tipo, COUNT(*) AS total FROM pedido GROUP BY tipo;",
+  "donation_by_type": "SELECT tipo, COUNT(*) AS total FROM donacion GROUP BY tipo;",
+  "total_donaciones": "SELECT COUNT(*) AS total FROM donacion;",
+  "total_pedidos": "SELECT COUNT(*) AS total FROM pedido;",
+  "donaciones_por_region": "SELECT r.nombre, COUNT(d.id) AS total FROM region r LEFT JOIN comuna c ON c.region_id = r.id LEFT JOIN donacion d ON d.comuna_id = c.id GROUP BY r.nombre;",
+  "pedidos_por_region": "SELECT r.nombre, COUNT(p.id) AS total FROM region r LEFT JOIN comuna c ON c.region_id = r.id LEFT JOIN pedido p ON p.comuna_id = c.id GROUP BY r.nombre;"
 }
