@@ -113,7 +113,7 @@ def ver_pedidos(pagina):
     data = []
     por_pagina = 5
     offset = (pagina - 1) * por_pagina
-    pedidos = db.getOrders(por_pagina, offset)
+    pedidos = db.obtener_pedidos(por_pagina, offset)
 
     for p in pedidos:
         pedido_id, comuna_nomb, tipo, descripcion, cantidad, nombre = p
