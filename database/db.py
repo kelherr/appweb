@@ -8,6 +8,9 @@ load_dotenv()
 with open('database/querys.json', 'r') as querys:
     QUERY_DICT = json.load(querys)
 
+###############################
+# Conexión a la base de datos
+###############################
 def get_conn():
     conn = pymysql.connect(
         db = os.getenv('DB_NAME'),
@@ -19,116 +22,123 @@ def get_conn():
     )
     return conn
 
-def addDonation(comuna, region, calle, tipo, cantidad, fecha, desc, 
+
+###########################################
+# Añadir elementos a la base de datos
+###########################################
+def agregar_donacion(comuna, region, calle, tipo, cantidad, fecha, desc, 
                 cond, nombre, email, celular):
     conn = get_conn()
     cursor = conn.cursor()
     try:
         cursor.execute(QUERY_DICT["num_comuna"], (comuna, region))
         id_comuna = cursor.fetchone()
-        cursor.execute(QUERY_DICT["add_donation"], (id_comuna, calle, tipo, 
+        cursor.execute(QUERY_DICT["agregar_donacion"], (id_comuna, calle, tipo, 
              cantidad, fecha, desc, cond, nombre, email, celular))
         conn.commit()
         return True
     except:
         return False
-    
 
-def getIdDonation():
-    conn = get_conn()
-    cursor = conn.cursor()
-    cursor.execute(QUERY_DICT["num_donation"])
-    num_donacion = cursor.fetchone()
-    return num_donacion
-
-def addImage(ruta, nombre, num_don):
+def agregar_imagen(ruta, nombre, num_don):
     conn = get_conn()
     cursor = conn.cursor()
     try:
-        cursor.execute(QUERY_DICT["add_pictures"], (ruta, nombre, num_don))
+        cursor.execute(QUERY_DICT["agregar_imagen"], (ruta, nombre, num_don))
         conn.commit()
         return True
     
     except:
-        return False
+        return False    
 
-def addOrder(email, celular, region, comuna, tipo, cantidad, nombre, descripcion):
+def agregar_pedido(email, celular, region, comuna, tipo, cantidad, nombre, descripcion):
     conn = get_conn()
     cursor = conn.cursor()
     try:
         cursor.execute(QUERY_DICT["num_comuna"], (comuna, region))
         id_comuna = cursor.fetchone()
-        cursor.execute(QUERY_DICT["add_order"], (id_comuna, tipo, descripcion, 
+        cursor.execute(QUERY_DICT["agregar_pedido"], (id_comuna, tipo, descripcion, 
                     cantidad, nombre, email, celular))
         conn.commit()
         return True
     except:
         return False
 
-def getComuna(id):
+
+############################
+# Obtener id 
+############################
+def obtener_id_donacion():
     conn = get_conn()
     cursor = conn.cursor()
-    cursor.execute(QUERY_DICT["comuna_nombre"], id)
-    nombre = cursor.fetchall()
-    return nombre
+    cursor.execute(QUERY_DICT["num_donacion"])
+    num_donacion = cursor.fetchone()
+    return num_donacion
 
-def getOrders(start, finish):
+
+#######################################
+# Obtener de a 5 pedidos/donaciones
+#######################################
+def obtener_pedidos(start, finish):
     conn = get_conn()
     cursor = conn.cursor()
     cursor.execute(QUERY_DICT["pedidos"], (start, finish))
     pedidos = cursor.fetchall()
     return pedidos
 
-def getDonations(start, finish):
+def obtener_donaciones(start, finish):
     conn = get_conn()
     cursor = conn.cursor()
-    cursor.execute(QUERY_DICT["donations"], (start, finish))
+    cursor.execute(QUERY_DICT["donaciones"], (start, finish))
     donaciones = cursor.fetchall()
     return donaciones
 
-def getPictures(id):
-    conn = get_conn()
-    cursor = conn.cursor()
-    cursor.execute(QUERY_DICT["prim_foto"], id)
-    foto = cursor.fetchone()
-    return foto
 
-
-def infoOrder(id):
+###################################################
+# Obtener información de un pedido/donación por id
+###################################################
+def info_pedido(id):
     conn = get_conn()
     cursor = conn.cursor()
     cursor.execute(QUERY_DICT["info_pedido"], id)
     pedido = cursor.fetchone()
     return pedido
 
-def infoDonation(id):
+def info_donacion(id):
     conn = get_conn()
     cursor = conn.cursor()
     cursor.execute(QUERY_DICT["info_donacion"], id)
     donacion = cursor.fetchone()
     return donacion
 
-def infoDonationPhoto(id):
+def info_donacion_foto(id):
     conn = get_conn()
     cursor = conn.cursor()
     cursor.execute(QUERY_DICT["info_fotos"], id)
     fotos = cursor.fetchall()
     return fotos
 
-def numOrders():
+############################################################
+# Determinar el número de cada tipo para pedidos/donaciones
+############################################################
+def num_pedidos():
     conn = get_conn()
     cursor = conn.cursor()
-    cursor.execute(QUERY_DICT["order_by_type"])
+    cursor.execute(QUERY_DICT["pedidos_por_tipo"])
     cant = cursor.fetchall()
     return cant
 
-def numDonations():
+def num_donaciones():
     conn = get_conn()
     cursor = conn.cursor()
-    cursor.execute(QUERY_DICT["donation_by_type"])
+    cursor.execute(QUERY_DICT["donaciones_por_tipo"])
     cant = cursor.fetchall()
     return cant
 
+
+################################################################
+# Obtener los datos para el mapa (últimos 10 pedidos/donaciones)
+################################################################
 def pedidos_mapa():
     conn = get_conn()
     cursor = conn.cursor()
@@ -143,6 +153,10 @@ def donaciones_mapa():
     cant = cursor.fetchall()
     return cant
 
+
+#######################################################
+# Consultas para los gráficos y tarjetas del dashboard
+#######################################################
 def total_donaciones():
     conn = get_conn()
     cursor = conn.cursor()
